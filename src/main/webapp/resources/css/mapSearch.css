@@ -1,0 +1,335 @@
+.page-content{
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    height: 100px;
+}
+#maps{
+    width: 100%;
+}
+#left-panel{
+    position: absolute;
+    top: 5px;
+    width: 520px;
+    padding: 0 10px 0 10px;
+    overflow: hidden;
+}
+#right-panel{
+    position: absolute;
+    top: 0;
+    right: 0px;
+    width: 50px;
+    background-color:whitesmoke;
+}
+#right-panel div{
+    width: 50px;
+    cursor: pointer;
+}
+#right-panel img{
+    display: none;
+    width: 100%;
+}
+.activeImg{
+    display: block !important;
+}
+#bottom-panel{
+    position: absolute;
+    bottom: 0;
+    right: 0px;
+    width: 100px;
+    background-color:whitesmoke;
+}
+#bottom-panel div {
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
+    border: 1px solid #1a242f;
+}
+.panel-left{
+    float: left;
+    width: 466px;
+    background-color: whitesmoke;
+}
+#panel-close{
+    float: left;
+    width: 34px;
+    height: 34px;
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+.openInfo{
+    width: 298px;
+}
+.openInfo-left{
+    float: left;
+    width: 100px;
+}
+.openInfo-left img{
+    width: 100%;
+}
+
+.panel-left-wrap{
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    margin-bottom: 4px;
+}
+.pan1{
+    width: 20%;
+    text-align: center;
+    line-height: 34px;
+}
+.pan2{
+    width: 40%;
+    text-align: center;
+    line-height: 34px;
+}
+.pan3{
+    width: 40%;
+    text-align: center;
+    line-height: 34px;
+}
+.pan-coor{
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    justify-content:space-between ;
+
+}
+.pan-coor input{
+    width: 102px;
+}
+
+.data-wrap{
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    justify-content:space-between ;
+}
+#scrollBar {
+    width: 100%;
+    height: 10px;
+    background-color: #ccc;
+    margin-top: 13px;
+    -webkit-border-radius: 12.5px;
+    -moz-border-radius: 12.5px;
+    border-radius: 12.5px;
+    cursor: pointer;
+    position: relative;
+}
+#scroll_Track {
+    width: 0px;
+    height: 10px;
+    /*background-color: #ff4400;*/
+    -webkit-border-radius: 12.5px;
+    -moz-border-radius: 12.5px;
+    border-radius: 12.5px;
+}
+#scroll_Thumb_start{
+    height: 25px;
+    width: 25px;
+    background-color: #efefef;
+    -webkit-border-radius: 12.5px;
+    -moz-border-radius: 12.5px;
+    border-radius: 12.5px;
+    border: 1px solid #ccc;
+    -webkit-box-shadow: 0px 0px 5px #ccc;
+    -moz-box-shadow: 0px 0px 5px #ccc;
+    box-shadow: 0px 0px 5px #ccc;
+    position: absolute;
+    margin-top: -18px;
+    cursor: pointer;
+}
+#scroll_Thumb_start:hover {
+    /*background-color: #ff4400;*/
+    border: 1px solid #fff;
+}
+#scroll_Thumb_end{
+    height: 25px;
+    width: 25px;
+    background-color: #efefef;
+    -webkit-border-radius: 12.5px;
+    -moz-border-radius: 12.5px;
+    border-radius: 12.5px;
+    border: 1px solid #ccc;
+    -webkit-box-shadow: 0px 0px 5px #ccc;
+    -moz-box-shadow: 0px 0px 5px #ccc;
+    box-shadow: 0px 0px 5px #ccc;
+    position: absolute;
+    margin-top: -18px;
+    cursor: pointer;
+}
+#scroll_Thumb_end:hover {
+    /*background-color: #ff4400;*/
+    border: 1px solid #fff;
+}
+.search-list{
+    width: 100%;
+    display: none;
+}
+
+
+.search-data{
+    width: 100%;
+    height: 200px;
+    overflow: auto;
+}
+.search-file{
+    width: 100%;
+    height: 200px;
+    background-color: whitesmoke;
+    display: none;
+    overflow: auto;
+}
+.con-hover{
+    background-color: #D0E5F5;
+}
+.file-list-con-select{
+    background-color: #FBEC88;
+}
+.file-list-con{
+    overflow: hidden;
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+.file-list-con2{
+    overflow: hidden;
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+.file-list-con-Marker{
+    overflow: hidden;
+    width: 400px;
+    border-bottom: 1px solid black;
+}
+.file-list-con a:link{
+    color: rgba(25, 158, 216, 1);
+}
+.file-list-con2 a:link{
+    color: rgba(25, 158, 216, 1);
+}
+
+.file-list-con .leftSdo{
+    float: left;
+    padding: 5px 0 5px 5px;
+    width: 120px;
+    height: 120px;
+}
+.leftSdo img{
+    width: 100%;
+    height: 100%;
+}
+.text-num{
+    width: 326px;
+    height: 60px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.file-list-con .rightSdo{
+    padding: 5px 10px 5px 130px;
+    height: 120px;
+}
+.file-list-con2 .left{
+    float: left;
+    width: 100px;
+    height: 75px;
+    background-color: #1a242f;
+}
+.file-list-con img,.file-list-con2 img{
+    width: 100%;
+    height: 100%;
+    cursor:pointer;
+}
+.file-list-con2 .right{
+    padding: 5px 0 5px 110px;
+    height: 75px;
+}
+.flex-wrap{
+    display: flex;
+    justify-content:space-between;
+}
+
+
+.spanns span{
+    display: inline-block;
+    margin: 0 5px 0 0 ;
+    padding: 2px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+}
+#sourceClass{
+    display: inline-block;
+    width: 250px;
+    height: 20px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+    line-height: 25px;
+}
+.see-down{
+    padding: 2px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #0a6cd6;
+    margin-left: 10px;
+    color: white;
+}
+.CSV{
+    background-color: yellow;
+}
+.GeoJSON{
+    background-color: blue;
+}
+.EXCEL{
+    background-color: red;
+}
+.HDF{
+    background-color: #1afa29;
+}
+.CERN{
+    background-color: grey;
+}
+.pan-left{
+    float: left;
+    width: 450px;
+    height: 100%;
+    background-color: red;
+
+}
+.pan-right{
+    float: left;
+    width: 50px;
+    height: 100%;
+    background-color: greenyellow;
+}
+
+.amap-luopan{
+    transform: scale(0.7);
+}
+.amap-controlbar-zoom{
+    margin: 0 0 0 56px;
+}
+.amap-scalecontrol{
+    left: 1100px !important;
+}
+.amap-scale-text{
+    font-weight: bold;
+}
+.ccc{
+    box-sizing: border-box;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline:none
+}
+.errorActive{
+    border-color: red;
+}

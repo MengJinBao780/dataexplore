@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="cn.csdb">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 将多个配置文件读取到容器中，交给Spring管理 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <!--<value>classpath:jdbc.properties</value>-->
+                <value>classpath:mongodb.properties</value>
+                <value>classpath:cas_urls.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean name="applicationContextProvider" class="cn.csdb.service.fileview.ApplicationContextProvider"></bean>
+    <!--<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="initialSize" value="${druid.initialSize}"/>
+        <property name="minIdle" value="${druid.minIdle}"/>
+        <property name="maxActive" value="${druid.maxActive}"/>
+        <property name="maxWait" value="${druid.maxWait}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${druid.validationQuery}"/>
+        <property name="testWhileIdle" value="${druid.testWhileIdle}"/>
+        <property name="testOnBorrow" value="${druid.testOnBorrow}"/>
+        <property name="testOnReturn" value="${druid.testOnReturn}"/>
+        <property name="poolPreparedStatements" value="${druid.poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${druid.maxPoolPreparedStatementPerConnectionSize}"/>
+        <property name="filters" value="${druid.filters}"/>
+    </bean>
+
+bean    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>-->
+    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
+
+    <bean id="simpleClientHttpRequestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+        <property name="connectTimeout" value="60000"/>
+        <property name="readTimeout" value="600000"/>
+    </bean>
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <constructor-arg ref="simpleClientHttpRequestFactory"/>
+        <property name="messageConverters">
+            <array>
+                <!--<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>-->
+                <!--<bean class="org.springframework.http.converter.StringHttpMessageConverter"/>-->
+                <!--<bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>-->
+                <!--<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>-->
+                <!--<bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter"/>-->
+                <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                    <property name="charset" value="utf-8"/>
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>application/json;charset=utf-8</value>
+                        </list>
+                    </property>
+                    <property name="features">
+                        <array>
+                            <value>WriteMapNullValue</value>
+                            <value>WriteNullStringAsEmpty</value>
+                        </array>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+
+    <import resource="system-config.xml"/>
+    <!-- 缓存配置文件 -->
+    <!--<import resource="spring-cache.xml"/>-->
+    <!-- 权限控制配置文件  -->
+    <import resource="spring-shiro.xml"/>
+
+    <!-- 导入mongodb的配置文件 -->
+    <import resource="spring-mongodb.xml"/>
+
+    <!--定时任务：sdo关联-->
+    <bean id="dataRelationJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="sdoRelationHandler"/>
+        <property name="targetMethod" value="executeData"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="dataRelationTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="dataRelationJob"/>
+        <property name="startDelay" value="60000"/>
+        <!--每天1:00运行一次 -->
+        <property name="cronExpression" value="0 0 1 * * ?"/>
+    </bean>
+    <!--定时任务：sdo访问记录，推荐-->
+    <bean id="fpTreeRelationJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="FPTreeHandler"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="fpTreeRelationTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="fpTreeRelationJob"/>
+        <property name="startDelay" value="60000"/>
+        <!--每天2:00运行一次 -->
+        <property name="cronExpression" value="0 0 2 * * ?"/>
+    </bean>
+    <!--定时任务：统计-->
+    <bean id="statJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="statSchedule"/>
+        <property name="targetMethod" value="statMethod"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="statTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="statJob"/>
+        <property name="cronExpression" value="10 0 0 * * ?"/>
+    </bean>
+
+    <!--执行定时任务-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="dataRelationTrigger"/>
+                <ref bean="fpTreeRelationTrigger"/>
+                <ref bean="statTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--es配置文件-->
+    <!--<elasticsearch:transport-client id="client" cluster-nodes="10.0.83.109:9300" cluster-name="es20180408"/>-->
+    <!--<elasticsearch:client id="client1" properties="esproperties"
+                          esNodes="${elasticsearch.esNodes}" />-->
+
+    <!--<bean name="elasticsearchTemplate" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
+        <constructor-arg name="client" ref="client"/>
+    </bean>-->
+
+</beans>
