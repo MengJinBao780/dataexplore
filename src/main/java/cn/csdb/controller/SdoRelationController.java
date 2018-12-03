@@ -46,7 +46,7 @@ public class SdoRelationController {
     //sdo map
     @RequestMapping(value = "/sdo/relation/map/{id}", method = RequestMethod.GET)
     public String detail(@PathVariable("id") String id, Model model) {
-        Sdo sdo = sdoService.getSdoById(id);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(id);
         if (sdo == null) {
             return "sdoRelation";
         }

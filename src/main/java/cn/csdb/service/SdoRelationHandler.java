@@ -92,15 +92,17 @@ public class SdoRelationHandler {
                 if (tarCount == 0) {//如果为0，说明没有要更新的sdo；由于按照create_time正序获取，所以之后的sdoRelation也不需要再更新
                     return;
                 }
-                Sdo srcSdo = sdoDao.getSdoById(sdoRelation.getSdoId());
+                cn.csdb.model.Resource srcSdo = sdoDao.getSdoById(sdoRelation.getSdoId());
                 if (srcSdo == null) {
                     continue;
                 }
                 TreeSet<SdoRelate> sdoRelateSet = Sets.newTreeSet(sdoRelation.getSdoRelates());
+/*
                 List<String> srcDescTerms = getTerms(srcSdo.getDesc(), true);
+*/
                 List<String> srcTitleTerms = getTerms(srcSdo.getTitle(), false);
-                Date srcPublisherPublishTime = srcSdo.getPublisherPublishTime();
-                String srcOrganization = srcSdo.getPublisher().getOrganization();
+                Date srcPublisherPublishTime = srcSdo.getCreateTime();
+                String srcOrganization = srcSdo.getPublishOrgnization();
                 String[] srcKeywordTerms = StringUtils.split(srcSdo.getKeyword(), ",");
                 long tarOffset = 0;
                 long tarCurSize = pageSize;
@@ -109,8 +111,8 @@ public class SdoRelationHandler {
                         tarCurSize = tarCount - tarOffset;
                     }
                     List<Sdo> targetSdoList = sdoDao.getSdoList(sdoRelation.getCreateTime(), tarOffset, tarCurSize);//分页获取tarSdo-list，按照create_time正序排序
-                    executeSdoRelation(sdoRelation, sdoRelateSet,
-                            srcDescTerms, srcTitleTerms, srcPublisherPublishTime, srcOrganization, srcKeywordTerms,
+                    executeSdoRelation(sdoRelation, sdoRelateSet,null
+                            /*srcDescTerms*/, srcTitleTerms, srcPublisherPublishTime, srcOrganization, srcKeywordTerms,
                             targetSdoList);//计算srcSdo与targetSdoList关联关系
                     tarOffset += pageSize;
                 }

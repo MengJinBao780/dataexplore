@@ -35,7 +35,7 @@ public class SdoDownloadService {
         for (SdoDownload sdoDownload : list){
             String sdoId = sdoDownload.getSdoId();
             if (StringUtils.isNotEmpty(sdoId)){
-                Sdo sdo = sdoDao.getSdoById(sdoId);
+                cn.csdb.model.Resource sdo = sdoDao.getSdoById(sdoId);
                 sdoDownload.setResName(sdo.getTitle());
             }
             //sdoDownload.setResName(sdoDao.getSdoById(sdoDownload.getSdoId()).getTitle());

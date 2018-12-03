@@ -565,7 +565,7 @@ public class IndexTest {
             try {
                 XContentBuilder doc = jsonBuilder().startObject();
                 FileType fileType = fileTypeDao.getById(fileInfo.getFtId());
-                Sdo sdo = sdoDao.getSdoById(fileType.getSdoId());
+                cn.csdb.model.Resource sdo = sdoDao.getSdoById(fileType.getSdoId());
                 if (!fileInfo.getCenter().trim().equals("无")) {
                     String[] center = fileInfo.getCenter().split(",");
                     String[] upLeft = fileInfo.getUpLeft().split(",");
@@ -604,7 +604,7 @@ public class IndexTest {
                         .field("pid", fileInfo.getPid())
                         .field("number", fileInfo.getNumber())
                         .field("filetype", fileInfo.getFtName())
-                        .field("publisher", sdo.getPublisher().getName())
+                        .field("publisher", sdo.getOrganizationName())
                         .field("updatetime", fileInfo.getUpdateTime())
                         .field("cloudiness", fileInfo.getCloudiness())
                         .field("size", fileInfo.getSize())
@@ -859,7 +859,7 @@ public class IndexTest {
                 try {
                     XContentBuilder doc = jsonBuilder().startObject();
 //                FileType fileType = fileTypeDao.getById(fileInfo.getFtId());
-                    Sdo sdo = sdoDao.getSdoById(fileInfo.getSdoPid());
+                    cn.csdb.model.Resource sdo = sdoDao.getSdoById(fileInfo.getSdoPid());
                     if (!fileInfo.getCenter().trim().equals("无")) {
                         String[] center = fileInfo.getCenter().split(",");
                         String[] upLeft = fileInfo.getUpLeft().split(",");
@@ -907,7 +907,7 @@ public class IndexTest {
                             .field("pid", fileInfo.getPid())
                             .field("number", fileInfo.getNumber())
                             .field("filetype", fileInfo.getFtName())
-                            .field("publisher", sdo.getPublisher().getName())
+                            .field("publisher", sdo.getOrganizationName())
                             .field("updatetime", fileInfo.getUpdateTime())
                             .field("cloudiness", fileInfo.getCloudiness())
                             .field("size", fileInfo.getSize())
@@ -1032,7 +1032,7 @@ public class IndexTest {
             try {
                 XContentBuilder doc = jsonBuilder().startObject();
                 //FileType fileType = fileTypeDao.getById(fileInfo.getFtId());
-                Sdo sdo = sdoDao.getSdoById(fileInfo.getSdoPid());
+                cn.csdb.model.Resource sdo = sdoDao.getSdoById(fileInfo.getSdoPid());
                 if (!fileInfo.getCenter().trim().equals("无")) {
                     String[] center = fileInfo.getCenter().split(",");
                     String[] upLeft = fileInfo.getUpLeft().split(",");
@@ -1071,7 +1071,7 @@ public class IndexTest {
                         .field("pid", fileInfo.getPid())
                         .field("number", fileInfo.getNumber())
                         .field("filetype", fileInfo.getFtName())
-                        .field("publisher", sdo.getPublisher().getName())
+                        .field("publisher", sdo.getOrganizationName())
                         .field("updatetime", fileInfo.getUpdateTime())
                         .field("cloudiness", fileInfo.getCloudiness())
                         .field("size", fileInfo.getSize())

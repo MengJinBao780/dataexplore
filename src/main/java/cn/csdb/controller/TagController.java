@@ -126,11 +126,13 @@ public class TagController {
             jo.put("result", "0");
             return jo;
         }
-        Sdo sdo = sdoService.getSdoById(sdoId);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
         TagDetail tagDetail = new TagDetail();
         tagDetail.setSdoId(sdoId);
         tagDetail.setSdoTitle(sdo.getTitle());
+/*
         tagDetail.setProdId(sdo.getProductId());
+*/
         tagDetail.setTagName(tagName);
         tagDetail.setStatus(0);
         tagDetail.setLoginId("loginUsername");

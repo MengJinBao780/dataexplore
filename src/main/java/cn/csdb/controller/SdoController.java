@@ -118,7 +118,7 @@ public class SdoController {
         //return size <= 10 ? sdoRelates : sdoRelates.subList(size - 10, size);
 
         //sdo元素信息
-        Sdo sdo = sdoService.getSdoById(id);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(id);
         model.addAttribute("tags", sdoMap.get("tags"));
         model.addAttribute("id", id);
         model.addAttribute("sdo", sdo);
@@ -140,7 +140,7 @@ public class SdoController {
         if(hasFavorite!=0){
             i=sdoFavoritesService.updateFavorite(loginId,sdoId,isValid);
         }else {
-            Sdo sdo = sdoService.getSdoById(sdoId);
+            cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
             i=sdoFavoritesService.addData(loginId,sdoId,sdo.getTitle());
         }
         if (i < 0)
@@ -158,7 +158,9 @@ public class SdoController {
         if(map.isEmpty()){
             return new HashMap<>();
         }
+/*
         map.put("condition",fileTemplateService.findSearchField(map.get("fileType").toString()));
+*/
         String loginId = String.valueOf(request.getSession().getAttribute("loginId"));
         if (loginId.equals("") || loginId.equals("null")){
             map.put("isLoad","");
@@ -168,7 +170,7 @@ public class SdoController {
             map.put("isValid",sdoFavoritesService.checkIsValid(loginId,id));
             map.put("userTags",tagDetailService. selTag(loginId,id));
         }
-        Sdo sdo = sdoService.getSdoById(id);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(id);
         sdoService.addVisitCount(id);
         sdoVisitService.addLog(loginId,id,sdo.getTitle());
         return map;
@@ -178,14 +180,16 @@ public class SdoController {
     @RequestMapping("getSdoDetails")
     public Map<String,String> getSdoDetails(@RequestParam("id") String id){
         Map<String,String> map = new HashMap<>();
-        Sdo sdo = sdoService.getSdoById(id);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(id);
         if (sdo ==null){
             return map;
         }
         map = sdoService.getSdoDetails(id);
         map.putAll(catalogService.getCatalogName(sdo.getCatalogId()));
         map.putAll(fileTypeService.getFtName(id));
+/*
         map.putAll(productService.getProductName(sdo.getProductId()));
+*/
         return map;
     }
     //下载元数据excel
@@ -200,7 +204,7 @@ public class SdoController {
             loginId ="匿名用户";
             return;
         }
-        Sdo sdo = sdoService.getSdoById(id);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(id);
         sdoService.addDownloadCount(id);
         sdoDownloadService.addLog(loginId,"","",id,sdo.getTitle());
         Workbook workbook = new HSSFWorkbook();
@@ -329,21 +333,21 @@ public class SdoController {
             map.put("result","登录后才能收藏");
             return map;
         }
-        Sdo sdo = sdoService.getSdoById(id);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(id);
         return sdoFavoritesService.getResult(loginId,id,isValid,sdo.getTitle());
     }
 
     //用户打标签
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping("addTag")
     public boolean addTag(@RequestParam("sdoId") String sdoId ,@RequestParam("tagName")String tagName,HttpServletRequest request){
-        Sdo sdo = sdoService.getSdoById(sdoId);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
         String loginId = String.valueOf(request.getSession().getAttribute("loginId"));
         if (sdo == null || loginId.equals("") ){
             return false;
         }
         return tagDetailService.addTag(loginId,sdoId,tagName,sdo.getProductId());
-    }
+    }*/
     //用户删除标签
     @ResponseBody
     @RequestMapping("delTag")
@@ -489,7 +493,7 @@ public class SdoController {
             response.sendRedirect(urlUtil.getUrlFromGscloud(url));
         }
         String sdoId= fileTypeService.getById(fileInfo.getFtId()).getSdoId();
-        Sdo sdo = sdoService.getSdoById(sdoId);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
         if (sdo!=null){
             sdoService.addDownloadCount(sdoId);
             sdoDownloadService.addLog(loginId, fileInfo.getId(), fileInfo.getFileName(),sdo.getId(),sdo.getTitle());
@@ -565,7 +569,7 @@ public class SdoController {
                     FileInfo fileInfo = fileInfoService.getById(listId[i]);
                     if (fileInfo != null) {
                         String sdoId= fileTypeService.getById(fileInfo.getFtId()).getSdoId();
-                        Sdo sdo = sdoService.getSdoById(sdoId);
+                        cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
                         if (sdo!=null){
                             sdoService.addDownloadCount(sdoId);
                             sdoDownloadService.addLog(loginId,fileInfo.getId(),fileInfo.getFileName(),sdo.getId(),sdo.getTitle());
@@ -788,8 +792,12 @@ public class SdoController {
         jsonObject.put("list",sdoList);
         jsonObject.put("totalPages",2);
         jsonObject.put("totalCount",20);
+/*
         List<Map<String,String>> tagList = sdoService.getMapsBySdoList(sdoList);
+*/
+/*
         jsonObject.put("tagList",tagList);
+*/
         return jsonObject;
     }
 

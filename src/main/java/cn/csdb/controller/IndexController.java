@@ -58,7 +58,7 @@ public class IndexController {
         List<Map<String, String>> maps = new ArrayList<>();
         String order="";
         if ("recent".equals(type)) {
-            order = "publisher_publishTime";
+            order = "createTime";
         } else if ("popular".equals(type)) {
             order = "visit_count";
         } else {

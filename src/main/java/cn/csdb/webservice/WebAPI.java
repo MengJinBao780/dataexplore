@@ -24,7 +24,7 @@ public class WebAPI {
     @RequestMapping(value = "/sdoMetadata/{id}", method = RequestMethod.GET)
     public JSONObject getSdoMetaData(@PathVariable("id") String id) {
         JSONObject jsonObject = new JSONObject();
-        Sdo sdo = sdoService.getSdoById(id);
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(id);
         jsonObject.put("data",sdo);
         return jsonObject;
     }

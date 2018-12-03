@@ -120,7 +120,7 @@ public class SdoFavoritesService {
         //return sdoFavoritesDao.getList(loginId,start,pageSize);
         final List<SdoFavorites> list = sdoFavoritesDao.getList(loginId,start,pageSize);
         for (SdoFavorites sdoFavorites : list){
-            Sdo sdo = sdoDao.getSdoById(sdoFavorites.getSdoId());
+            cn.csdb.model.Resource sdo = sdoDao.getSdoById(sdoFavorites.getSdoId());
             sdoFavorites.setResName(sdo.getTitle());
         }
         List<String> sdoIdList = Lists.transform(list, new Function<SdoFavorites, String>() {

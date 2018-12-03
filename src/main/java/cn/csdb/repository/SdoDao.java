@@ -35,14 +35,14 @@ public class SdoDao {
     }
 
     //排序并获取前15条sdo集合
-    public List<Sdo> getInitDates(String order) {
+    public List<cn.csdb.model.Resource> getInitDates(String order) {
         DBObject query = QueryBuilder.start().get();
         BasicDBObject basicDBObject = new BasicDBObject();
         basicDBObject.put("_id", true);
         basicDBObject.put("title", true);
-        basicDBObject.put("icon_path", true);
-        basicDBObject.put("publisher_publishTime", true);
-        basicDBObject.put("publisher.organization", true);
+        basicDBObject.put("imagePath", true);
+        basicDBObject.put("createTime", true);
+        basicDBObject.put("publishOrgnization", true);
         basicDBObject.put("visit_count",true);
         Sort.Order so = new Sort.Order(Sort.Direction.DESC, order);
         List<Sort.Order> sos = new ArrayList<>();
@@ -51,13 +51,13 @@ public class SdoDao {
         basicQuery.with(new Sort(sos));
         basicQuery.skip(0);
         basicQuery.limit(15);
-        List<Sdo> sdos = mongoTemplate.find(basicQuery, Sdo.class);
+        List<cn.csdb.model.Resource> sdos = mongoTemplate.find(basicQuery, cn.csdb.model.Resource.class);
         return sdos;
     }
 
     //根据id获取sdo对象
-    public Sdo getSdoById(String id) {
-        return mongoTemplate.findById(id, Sdo.class);
+    public cn.csdb.model.Resource getSdoById(String id) {
+        return mongoTemplate.findById(id, cn.csdb.model.Resource.class);
     }
 
     public Sdo getSdoByPid(String pid) {
@@ -66,20 +66,20 @@ public class SdoDao {
 
     //sdo浏览次数+1
     public void addVisitCount(String id) {
-        Sdo sdo = getSdoById(id);
+        cn.csdb.model.Resource sdo = getSdoById(id);
         DBObject query = QueryBuilder.start().and("_id").is(id).get();
         BasicQuery basicQuery = new BasicQuery(query);
-        Update count = Update.update("visit_count", sdo.getVisitCount() + 1);
-        mongoTemplate.updateFirst(basicQuery, count, Sdo.class);
+        Update count = Update.update("vCount", sdo.getvCount() + 1);
+        mongoTemplate.updateFirst(basicQuery, count, cn.csdb.model.Resource.class);
     }
 
     //sdo下载次数+1
     public void addDownloadCount(String id) {
-        Sdo sdo = getSdoById(id);
+        cn.csdb.model.Resource sdo = getSdoById(id);
         DBObject query = QueryBuilder.start().and("_id").is(id).get();
         BasicQuery basicQuery = new BasicQuery(query);
-        Update count = Update.update("download_count", sdo.getDownloadCount() + 1);
-        mongoTemplate.updateFirst(basicQuery, count, Sdo.class);
+        Update count = Update.update("dCount", sdo.getdCount() + 1);
+        mongoTemplate.updateFirst(basicQuery, count, cn.csdb.model.Resource.class);
     }
 
     //获取sdo对像中不同的文件类型
