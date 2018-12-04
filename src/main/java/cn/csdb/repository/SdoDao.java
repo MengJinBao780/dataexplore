@@ -43,7 +43,7 @@ public class SdoDao {
         basicDBObject.put("imagePath", true);
         basicDBObject.put("createTime", true);
         basicDBObject.put("publishOrgnization", true);
-        basicDBObject.put("visit_count",true);
+        basicDBObject.put("vCount",true);
         Sort.Order so = new Sort.Order(Sort.Direction.DESC, order);
         List<Sort.Order> sos = new ArrayList<>();
         sos.add(so);
