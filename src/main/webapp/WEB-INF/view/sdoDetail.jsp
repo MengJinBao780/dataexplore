@@ -737,15 +737,17 @@
                         })
                     });
                     $("#related-peo-name").html(data.pOrganization);
-                    $("#related-peo-pName").html(data.pName);
-                    var arrpTel = data.pTel.split(";");
+                    $("#related-peo-pName").html(data.pOrganization);
+                    $("#related-peo-pTel").append(data.tel + "<br>");
+                    $("#related-peo-pEmail").append(data.email + "<br>");
+                    /*var arrpTel = data.pTel.split(";");
                     for (var i = 0; i < arrpTel.length; i++) {
                         $("#related-peo-pTel").append(arrpTel[i] + "<br>");
                     }
                     var arrEmail = data.pEmail.split(";");
                     for (var i = 0; i < arrEmail.length; i++) {
                         $("#related-peo-pEmail").append(arrEmail[i] + "<br>");
-                    }
+                    }*/
 
                     if (constTataType != "XLSX" && constTataType != "ARC/GRID") {
                         $("#table-form").show();

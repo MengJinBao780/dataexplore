@@ -95,7 +95,18 @@ public class SdoService {
         map.put("dCount",sdo.getdCount());
         map.put("pOrganization",sdo.getPublishOrgnization());
         map.put("fNumber",sdo.getToFilesNumber());
+        map.put("desc",sdo.getIntroduction());
         map.put("mSize",transMData(sdo.getToMemorySize()));
+        map.put("pOrganization",sdo.getPublishOrgnization());
+        map.put("email",sdo.getEmail());
+        map.put("tel",sdo.getPhoneNum());
+        map.put("fileType",sdo.getPublicType());
+        String[] tags = sdo.getKeyword().split(",");
+        List<String> list = new ArrayList<>();
+        for(String tag:tags){
+            list.add(tag);
+        }
+        map.put("tags",list);
         /*List<String> list = new ArrayList<>();
         for (int i = 0;i<sdo.getCreatorOrganization().size();i++){
             list.add(sdo.getCreatorOrganization().get(i).getOrganization());
@@ -134,6 +145,9 @@ public class SdoService {
         map.put("desc",sdo.getDesc());
 */
         map.put("keyword",sdo.getKeyword());
+        map.put("pOrganization",sdo.getPublishOrgnization());
+        map.put("email",sdo.getEmail());
+        map.put("tel",sdo.getPhoneNum());
        /* map.put("visitLimit",sdo.getVisitLimit().equals("1")? "公开":"限制");
         map.put("rangeDescription",sdo.getRangeDescription());
         map.put("center",sdo.getCenter());
