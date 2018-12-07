@@ -750,7 +750,9 @@
                     }*/
 
                     if (constTataType != "XLSX" && constTataType != "ARC/GRID") {
+/*
                         $("#table-form").show();
+*/
                         var url = "${ctx}/sdo/getFileByHDF";
                         updateHDF();
                         getMidData(1, HDFData, constTataType, url);

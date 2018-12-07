@@ -75,6 +75,9 @@ public class SdoController {
     @Resource
     private SdoRelationService sdoRelationService;
 
+    @Resource
+    private TableFieldComsService tableFieldComsService;
+
     /*
     //原来的
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
@@ -934,6 +937,19 @@ public class SdoController {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    //获取表字段信息
+    @ResponseBody
+    @RequestMapping(value = "getTableFieldComs")
+    public JSONObject getFieldComsByTableName(String subjectCode, String tableName) {
+        JSONObject jsonObject = new JSONObject();
+        Map<String, List<TableInfo>> fieldComsByTableName = tableFieldComsService.getDefaultFieldComsByTableName(subjectCode, tableName);
+        if (fieldComsByTableName != null) {
+            List<TableInfo> tableInfos = fieldComsByTableName.get(tableName);
+            jsonObject.put("tableInfos", tableInfos);
+        }
+        return jsonObject;
     }
 }
 
