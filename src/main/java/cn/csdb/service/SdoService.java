@@ -70,7 +70,9 @@ public class SdoService {
             map.put("iconPaht", temp.getImagePath());
             map.put("publisherPublishTime", simpleDateFormat.format(temp.getCreateTime()));
             map.put("publishOrganization", temp.getPublishOrgnization());
+/*
             map.put("visitCount",temp.getvCount().toString());
+*/
 /*
             map.put("visitCount",temp.getVisitCount().toString());
 */
@@ -91,8 +93,16 @@ public class SdoService {
         map.put("title",sdo.getTitle());
         map.put("creator",sdo.getCreatePerson());
         map.put("time",sdo.getCreateTime());
-        map.put("vCount",sdo.getvCount());
-        map.put("dCount",sdo.getdCount());
+        if(sdo.getvCount()==null){
+            map.put("vCount", 0);
+        }else {
+            map.put("vCount", sdo.getvCount());
+        }
+        if(sdo.getdCount()==null){
+            map.put("dCount", 0);
+        }else {
+            map.put("dCount", sdo.getdCount());
+        }
         map.put("pOrganization",sdo.getPublishOrgnization());
         map.put("fNumber",sdo.getToFilesNumber());
         map.put("desc",sdo.getIntroduction());
