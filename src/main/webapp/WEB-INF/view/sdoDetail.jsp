@@ -99,52 +99,7 @@
             </div>
             <div class="line"></div>
             <div id="table-form" style="display: none">
-                <div class="map-detail">
-                    <%--<label>关键词：</label>
-                    <input style="width:302px;" type="text" name="">--%>
-                    <label>标识符：</label>
-                    <input style="width:141px;" type="text" name="" id="formLabel">
-                    <label>条代号：</label>
-                    <input style="width:141px;margin-right:0" type="text" name="" id="formAttribute">
-                    <%--<label>提供者：</label>
-                    <input type="text" name="">
-                    <label>文件格式：</label>
-                    <div class="files-type">
-                        <span class="file-type-one">SHP</span>
-                        <span class="file-type-two">CSV</span>
-                        <span class="file-type-three">KML</span>
-                    </div>--%>
-                    <div class="clear"></div>
-                </div>
-                <!-- 范围 -->
-                <div class="map-range">
-                    <label>范 围：</label>
-                    <input style="margin-left:8px;" id="eastLng" placeholder="最大经度" name="formRange"/>
-                    <input id="westLng" placeholder="最小经度" name="formRange"/>
-                    <input id="northLat" placeholder="最大纬度" name="formRange"/>
-                    <input id="southLat" placeholder="最小纬度" name="formRange"/>
-                </div>
-                <%--<div class="map-range">
-                    <label>高  度：</label>
-                    <input style="margin-left:8px;" id="lowHeight" type="text" placeholder="最低海拔" />
-                    <input id="longHeight" type="text" placeholder="最高海拔" />
-                </div>--%>
-                <!-- 云覆盖率 -->
-                <div class="map-cover">
-                    <label>云覆盖率</label>
-                    <input id="startrate" type="text"/><label>%</label>
-                    <div id="rateSlider"
-                         style="width:290px;float:left;margin-top:6px;margin-right:26px;margin-left: 7px"></div>
-                    <input id="stoprate" type="text"/><label>%</label>
-                </div>
-                <div id="mapContioner">
-                    <div id="right-panel">
-                        <div id="rectangular" style="height: 50px;">
-                            <img src="${ctx}/resources/img/rect_icon.png" class="activeImg">
-                            <img src="${ctx}/resources/img/rect_icon_active.png">
-                        </div>
-                    </div>
-                </div>
+               <div style="height: 500px;background-color: red"></div>
             </div>
             <div id="table-form2" style="display: none">
                 <div class="map-detail" id="map-detail">
@@ -580,7 +535,6 @@
     <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
     <script src="${ctx}/resources/js/commentsStar.js"></script>
     <script src="${ctx}/resources/bundles/nouislider/nouislider.min.js"></script>
-    <script src="${ctx}/resources/js/dataset.js"></script>
 
 
     <script>
@@ -740,117 +694,12 @@
                     $("#related-peo-pName").html(data.pOrganization);
                     $("#related-peo-pTel").append(data.tel + "<br>");
                     $("#related-peo-pEmail").append(data.email + "<br>");
-                    /*var arrpTel = data.pTel.split(";");
-                    for (var i = 0; i < arrpTel.length; i++) {
-                        $("#related-peo-pTel").append(arrpTel[i] + "<br>");
-                    }
-                    var arrEmail = data.pEmail.split(";");
-                    for (var i = 0; i < arrEmail.length; i++) {
-                        $("#related-peo-pEmail").append(arrEmail[i] + "<br>");
-                    }*/
 
                     if (constTataType != "XLSX" && constTataType != "ARC/GRID") {
-/*
                         $("#table-form").show();
-*/
-                        var url = "${ctx}/sdo/getFileByHDF";
-                        updateHDF();
+
                         getMidData(1, HDFData, constTataType, url);
 
-                        slider.noUiSlider.on('change.one', function (values, handle, unencoded, tap, positions) {
-                            var startrate = parseInt(values[0]);
-                            var endrate = parseInt(values[1]);
-                            $("#startrate").val(startrate);
-                            $("#stoprate").val(endrate);
-                            updateHDF();
-                            getMidData(1, HDFData, constTataType, url);
-                        });
-                        $("[name='formRange']").on("focusout", function () {
-                            updateHDF();
-                            isDrawRect();
-                            getMidData(1, HDFData, constTataType, url);
-                        });
-                        $("#formLabel").on("focusout", function () {
-                            updateHDF();
-                            getMidData(1, HDFData, constTataType, url);
-                        })
-                        $("#formAttribute").on("focusout", function () {
-                            updateHDF();
-                            getMidData(1, HDFData, constTataType, url);
-                        })
-                        $("[name='formRange']").on("keypress", function (ev) {
-                            var event = ev || window.event;
-                            if (event.keyCode == 13) {
-                                updateHDF();
-                                /*isDrawRect();*/
-                                getMidData(1, HDFData, constTataType, url);
-                            }
-                        });
-                        $("#formLabel").on("keypress", function (ev) {
-                            var event = ev || window.event;
-                            if (event.keyCode == 13) {
-                                updateHDF();
-                                /*isDrawRect();*/
-                                getMidData(1, HDFData, constTataType, url);
-                            }
-                        });
-                        $("#formAttribute").on("keypress", function (ev) {
-                            var event = ev || window.event;
-                            if (event.keyCode == 13) {
-                                updateHDF();
-                                /*isDrawRect();*/
-                                getMidData(1, HDFData, constTataType, url);
-                            }
-                        });
-                        $("#rectangular").on("click", function () {
-                            if ($(this).children(".activeImg").index() == 1) {
-                                $("#westLng").val("0")
-                                $("#eastLng").val("0")
-                                $("#northLat").val("0")
-                                $("#southLat").val("0")
-                                $(this).children().first().addClass("activeImg");
-                                $(this).children().last().removeClass("activeImg");
-                                mainMap.clearMap();
-                                updateHDF();
-                                getMidData(1, HDFData, constTataType, url);
-                                return
-                            }
-                            $(this).children().first().removeClass("activeImg")
-                            $(this).children().last().addClass("activeImg")
-                            mainMap.clearMap();
-                            mouseTools.rectangle()
-                            AMap.event.addListener(mouseTools, 'draw', function (e) { //����¼�\
-                                var paths = e.obj.getPath();
-                                if (paths[0].lng > paths[2].lng) {
-                                    $("#westLng").val(paths[2].lng)
-                                    $("#eastLng").val(paths[0].lng)
-                                } else {
-                                    $("#westLng").val(paths[0].lng)
-                                    $("#eastLng").val(paths[2].lng)
-                                }
-                                if (paths[0].lat > paths[2].lat) {
-                                    $("#southLat").val(paths[2].lat)
-                                    $("#northLat").val(paths[0].lat)
-                                } else {
-                                    $("#southLat").val(paths[0].lat)
-                                    $("#northLat").val(paths[2].lat)
-                                }
-                                updateHDF();
-
-                                getMidData(1, HDFData, constTataType, hdfUrl);
-                                mouseTools.close();
-
-                                /*for (var i = 0; i < paths.length; i++) {
-                                    new AMap.Marker({
-                                        position: paths[i],
-                                        title: paths[i],
-                                        map: mainMap
-                                    });
-                                };*/
-                                $(".rect-box").removeClass('rect-active');
-
-                            });
-                        })
                     }
                     else {
                         var ExStr = "";
@@ -883,7 +732,6 @@
                             if (event.keyCode == 13) {
                                 console.log("aaaa")
                                 updateEXCEL(dataArr);
-                                /*isDrawRect();*/
                                 getMidData(1, EXCELData, constTataType, url);
                             }
                         });
@@ -946,66 +794,7 @@
                 }
             });
         }
-        function updateHDF() {
-            HDFData.pid = $("#formLabel").val();
-            HDFData.number = $("#formAttribute").val();
-            if (!Exp.test($("#westLng").val()) || $("#westLng").val() == "") {
-                $("#westLng").val("")
-            }
-            if (!Exp.test($("#eastLng").val()) || $("#eastLng").val() == "") {
-                $("#eastLng").val("")
-            }
-            if (!Exp.test($("#northLat").val()) || $("#northLat").val() == "") {
-                $("#northLat").val("")
-            }
-            if (!Exp.test($("#southLat").val()) || $("#southLat").val() == "") {
-                $("#southLat").val("")
-            }
-            HDFData.x1 = $("#westLng").val();
-            HDFData.x2 = $("#eastLng").val();
-            HDFData.y2 = $("#northLat").val();
-            HDFData.y1 = $("#southLat").val();
-            HDFData.cloudiness1 = $("#startrate").val();
-            HDFData.cloudiness2 = $("#stoprate").val();
-            HDFData.sdoId = sdoId;
-        }
-        function isDrawRect() {
-            var x1 = parseFloat($("#westLng").val());
-            var x2 = parseFloat($("#eastLng").val());
-            var y1 = parseFloat($("#southLat").val());
-            var y2 = parseFloat($("#northLat").val());
-            var num = x1 + x2 + y1 + y2;
-            if (x2 < x1) {
-                toastr["error"]("经度大小输入错误");
-                return
-            }
-            if (y2 < y1) {
-                toastr["error"]("纬度大小输入错误");
-                return
-            }
-            if (!isNaN(num) && x2 > x1 && y2 > y1) {
-                var southWest = new AMap.LngLat(x1, y1)
-                var northEast = new AMap.LngLat(x2, y2)
-                var bounds = new AMap.Bounds(southWest, northEast);
-                mainMap.clearMap();
-                new AMap.Rectangle({
-                    map: mainMap,
-                    bounds: bounds,
-                    strokeColor: '#1779cc',
-                    strokeOpacity: 1,
-                    strokeWeight: 0,
-                    fillColor: '#1779cc',
-                    fillOpacity: 0.5,
-                    zIndex: 10,
-                    bubble: true,
-                    cursor: 'pointer',
-                });
-                mainMap.setZoom(7);
-                mainMap.setCenter([(x1 + x2) / 2, (y1 + y2) / 2]);
-            } else {
-                mainMap.clearMap();
-            }
-        }
+
 
         function getMidData(pageNo, data, type, url) {
             var consData = data;
@@ -1081,9 +870,6 @@
 
         function htmlEncodeJQ(str) {
             return $('<span/>').text(str).html();
-        }
-        function htmlDecodeJQ(str) {
-            return $('<span/>').html(str).text();
         }
         function filter_keywords(value,keywords) {
             //获取文本输入框中的内容
@@ -1212,7 +998,6 @@
             var url = "${ctx}/sdo/downloadFiles?listId=" + list.toString();
             window.location.href = url;
         })
-
 
         $("#favorite").on("click", function () {
             if (loginId == "") {
