@@ -43,7 +43,9 @@ public class SdoDao {
         basicDBObject.put("imagePath", true);
         basicDBObject.put("createTime", true);
         basicDBObject.put("publishOrgnization", true);
+/*
         basicDBObject.put("vCount",true);
+*/
         Sort.Order so = new Sort.Order(Sort.Direction.DESC, order);
         List<Sort.Order> sos = new ArrayList<>();
         sos.add(so);
@@ -69,6 +71,9 @@ public class SdoDao {
         cn.csdb.model.Resource sdo = getSdoById(id);
         DBObject query = QueryBuilder.start().and("_id").is(id).get();
         BasicQuery basicQuery = new BasicQuery(query);
+        if(sdo.getvCount()==null){
+            sdo.setvCount(1);
+        }
         Update count = Update.update("vCount", sdo.getvCount() + 1);
         mongoTemplate.updateFirst(basicQuery, count, cn.csdb.model.Resource.class);
     }
@@ -78,6 +83,9 @@ public class SdoDao {
         cn.csdb.model.Resource sdo = getSdoById(id);
         DBObject query = QueryBuilder.start().and("_id").is(id).get();
         BasicQuery basicQuery = new BasicQuery(query);
+        if(sdo.getdCount()==null){
+            sdo.setdCount(0);
+        }
         Update count = Update.update("dCount", sdo.getdCount() + 1);
         mongoTemplate.updateFirst(basicQuery, count, cn.csdb.model.Resource.class);
     }
