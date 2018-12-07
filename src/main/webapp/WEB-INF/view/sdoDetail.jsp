@@ -20,6 +20,63 @@
     <link href="${ctx}/resources/css/newSdoDetail.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/resources/bundles/nouislider/nouislider.min.css">
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        #tabStyTwo{
+            transition: all 0.5s;
+        }
+       .cus_input{
+           padding: 6px 12px;
+           font-size: 14px;
+           height: 35px;
+           box-sizing: border-box;
+           color: #555;
+           background-color: #fff;
+           background-image: none;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+           -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+           box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+           -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+           -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+           transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+       }
+       .cus_btn{
+           padding: 6px 12px;
+           margin-bottom: 0;
+           font-size: 14px;
+           font-weight: normal;
+           line-height: 1.2;
+           text-align: center;
+           white-space: nowrap;
+           vertical-align: middle;
+           -ms-touch-action: manipulation;
+           touch-action: manipulation;
+           cursor: pointer;
+           -webkit-user-select: none;
+           -moz-user-select: none;
+           -ms-user-select: none;
+           user-select: none;
+           background-image: none;
+           border: 1px solid transparent;
+           border-radius: 4px;
+           background-color: #0a96da;
+       }
+        .cus_che{
+            float: left;
+            width: 14%;
+        }
+        .cus_bor{
+            border: 1px solid #ddd;
+            border-top-color: transparent;
+        }
+        .tabbable-custom > .nav-tabs > li.active a{
+            border-top: 3px solid #f3565d;
+            margin-top: 0;
+            border-radius: 0;
+
+        }
+
+    </style>
 </head>
 <body>
 <div class="page-content">
@@ -99,7 +156,139 @@
             </div>
             <div class="line"></div>
             <div id="table-form" style="display: none">
-               <div style="height: 500px;background-color: red"></div>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel">
+                        <div  role="tab" id="headingOne" style="overflow: hidden">
+                                <div data-toggle="collapse" style="float: right;cursor: pointer" id="aaaaaa"
+                                     data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <span style="color: #0a96da" id="tabStyOne">收缩</span>
+                                    <span class="glyphicon glyphicon-chevron-up " id="tabStyTwo"></span>
+                                </div>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body" style="background: linear-gradient(white, #D7D7D7);">
+                                <div style="overflow: hidden ">
+                                    <div style="float: left;width: 15%;color: #2E8719;font-weight: bold;font-size: 16px;line-height: 35px">
+                                        显示列：
+                                    </div>
+                                    <div style="float: left;width: 10%;line-height: 35px">
+                                        <input type="checkbox">全选
+                                    </div>
+                                    <div style="float: left;width: 74%;line-height: 35px;">
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+                                        <div class="cus_che">
+                                            <input type="checkbox">
+                                            <span>全选</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div style="overflow: hidden;position: relative">
+                                    <div style="float: left;width: 15%;color: #2E8719;font-weight: bold;font-size: 16px;line-height: 35px">
+                                        设置检索条件：
+                                    </div>
+                                    <div style="float: left;width: 65%;">
+                                        <div style="overflow: hidden">
+                                            <div style="float: left;width: 60%;text-align: center">
+                                                <select name="" style="width: 93px" class="cus_input" id="aaa">
+                                                    <option value="">aaaaa</option>
+                                                    <option value="">bbbbb</option>
+                                                </select>
+                                                <select name="" style="width: 93px" class="cus_input" id="bbb">
+                                                    <option value="">aaaaa</option>
+                                                    <option value="">bbbbb</option>
+                                                </select>
+                                                <select name="" style="width: 93px" class="cus_input" id="ccc">
+                                                    <option value="">aaaaa</option>
+                                                    <option value="">bbbbb</option>
+                                                </select>
+                                            </div>
+                                            <div style="float: left;width:40%;text-align: center">
+                                                <input class="cus_input" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="position: absolute;right: 0;bottom: 0;line-height: 35px;height: 35px">
+                                        <span style="color: #0a96da;cursor: pointer">+增加检索条件</span>
+                                        <button style="margin: 0 10px;" class="cus_btn">检索</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="overflow: hidden">
+                    <div class="tabbable-custom ">
+                        <!-- tab header --->
+                        <ul class="nav nav-tabs">
+                            <li class="active" value="0">
+                                <a href="#undescribe" data-toggle="tab">
+                                    待描述数据表 </a>
+                            </li>
+                            <li value="1">
+                                <a href="#isdescribe" data-toggle="tab">
+                                    已描述数据表</a>
+                            </li>
+                            <li value="2">
+                                <a href="#filedata" data-toggle="tab">
+                                    文件数据</a>
+                            </li>
+                        </ul>
+                        <!--tab content-->
+                        <div class="tab-content">
+
+                            <!--用户管理标签页-->
+                            <div class="tab-pane cus_bor active" id="undescribe" style="min-height: 400px">
+                                aaaaaaaaaaaaaaaaaaa
+                            </div>
+
+                            <!--group tab-->
+                            <div class="tab-pane cus_bor" id="isdescribe" style="min-height: 400px">
+                                ssssssssssssssssssssssssssssssssss
+                            </div>
+                            <div class="tab-pane cus_bor" id="filedata" style="min-height: 400px">
+                               dddddddddddddddddddddddddddddddd
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="table-form2" style="display: none">
                 <div class="map-detail" id="map-detail">
@@ -109,7 +298,7 @@
                     </div>--%>
                 </div>
             </div>
-            <table id="table-th" class="table table-bordered">
+            <table id="table-th" class="table table-bordered" style="display: none">
                 <caption>
                     <input class="select-download" type="button" value="批量下载" id="download-all">
                 </caption>
@@ -548,6 +737,17 @@
         $("#second").addClass("active");
         $("#third").removeClass("active");
         var keyWords = JSON.parse(sessionStorage.getItem("keyWords"));
+
+        $(".collapse").on('shown.bs.collapse', function () {
+            $("#tabStyOne").text("收缩")
+            $("#tabStyTwo").css("transform","rotate(0deg)")
+        })
+        $(".collapse").on('hidden.bs.collapse', function () {
+            $("#tabStyOne").text("展开")
+            $("#tabStyTwo").css("transform","rotate(180deg)")
+        })
+
+
         $(function () {
             visitSdo();
             getScoreList(1);
@@ -698,7 +898,6 @@
                     if (constTataType != "XLSX" && constTataType != "ARC/GRID") {
                         $("#table-form").show();
 
-                        getMidData(1, HDFData, constTataType, url);
 
                     }
                     else {
@@ -719,6 +918,7 @@
 
                         $("#map-detail").append(ExStr);
                         $("#table-form2").show();
+                        $("#table-th").show();
 
                         var url = "${ctx}/sdo/getFileByCERN";
                         updateEXCEL(dataArr);
@@ -794,8 +994,6 @@
                 }
             });
         }
-
-
         function getMidData(pageNo, data, type, url) {
             var consData = data;
             consData.fileType = type;
