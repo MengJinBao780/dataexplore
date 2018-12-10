@@ -172,11 +172,11 @@
                                         显示列：
                                     </div>
                                     <div style="float: left;width: 10%;line-height: 35px">
-                                        <input type="checkbox">全选
+                                        <input type="checkbox" id="selectAll">全选
                                     </div>
                                     <div style="float: left;width: 74%;line-height: 35px;">
                                         <div class="cus_che">
-                                            <input type="checkbox">
+                                            <input type="checkbox" >
                                             <span>全选</span>
                                         </div>
 
@@ -226,10 +226,6 @@
                                     <div style="float: left;width: 65%;">
                                         <div style="overflow: hidden">
                                             <div style="float: left;width: 60%;text-align: center">
-                                                <select name="" style="width: 93px" class="cus_input" id="aaa">
-                                                    <option value="">aaaaa</option>
-                                                    <option value="">bbbbb</option>
-                                                </select>
                                                 <select name="" style="width: 93px" class="cus_input" id="bbb">
                                                     <option value="">aaaaa</option>
                                                     <option value="">bbbbb</option>
@@ -243,9 +239,10 @@
                                                 <input class="cus_input" type="text">
                                             </div>
                                         </div>
+
                                     </div>
                                     <div style="position: absolute;right: 0;bottom: 0;line-height: 35px;height: 35px">
-                                        <span style="color: #0a96da;cursor: pointer">+增加检索条件</span>
+                                        <span style="color: #0a96da;cursor: pointer" onclick="addSelectConditions()">+增加检索条件</span>
                                         <button style="margin: 0 10px;" class="cus_btn">检索</button>
                                     </div>
                                 </div>
@@ -714,12 +711,34 @@
         </div>
     </div>
 </div>
+
+<script type="text/html" id="resourceTmpl">
+    <div style="overflow: hidden">
+        <div style="float: left;width: 60%;text-align: center">
+            <select name="" style="width: 93px" class="cus_input" >
+                <option value="">aaaaa</option>
+                <option value="">bbbbb</option>
+            </select>
+            <select name="" style="width: 93px" class="cus_input" >
+                <option value="">aaaaa</option>
+                <option value="">bbbbb</option>
+            </select>
+            <select name="" style="width: 93px" class="cus_input" >
+                <option value="">aaaaa</option>
+                <option value="">bbbbb</option>
+            </select>
+        </div>
+        <div style="float: left;width:40%;text-align: center">
+            <input class="cus_input" type="text">
+        </div>
+    </div>
+</script>
+
+
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
-    <script type="text/javascript"
-            src="http://webapi.amap.com/maps?v=1.4.6&dev-Map=74dbb914c763808d47998ac6e45d706a&plugin=AMap.MouseTool"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
     <script src="${ctx}/resources/js/commentsStar.js"></script>
@@ -737,7 +756,7 @@
         $("#second").addClass("active");
         $("#third").removeClass("active");
         var keyWords = JSON.parse(sessionStorage.getItem("keyWords"));
-
+        var selectList=[];
         $(".collapse").on('shown.bs.collapse', function () {
             $("#tabStyOne").text("收缩")
             $("#tabStyTwo").css("transform","rotate(0deg)")
@@ -1065,7 +1084,35 @@
                 }
             })
         }
+        <!-- 新mysql类型-->
+        function addSelectConditions() {
+            
+        }
 
+        $.ajax({
+            url:"${ctx}/resource/relationalDatabaseTableList",
+            type:"GET",
+            success:function (data) {
+                console.log(data)
+            }
+        })
+        /*$.ajax({
+            url:"${ctx}/sdo/getTableFieldComs",
+            type:"POST",
+            data:{
+                subjectCode:"",
+                tableName:""
+            },
+            success:function (data) {
+                console.log(data)
+            }
+        })*/
+        
+        
+        
+        
+        
+        
         function htmlEncodeJQ(str) {
             return $('<span/>').text(str).html();
         }
