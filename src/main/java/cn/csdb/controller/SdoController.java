@@ -435,13 +435,28 @@ public class SdoController {
                                              @RequestParam(name = "fileName", defaultValue = "")String fileName,
                                              @RequestParam(name = "fileType", defaultValue = "xlsx")String fileType,
                                              @RequestParam(name = "pageNum", defaultValue = "1")Integer pageNum,
-                                             @RequestParam(name ="sdoId")String sdoId){
+                                             @RequestParam(name ="sdoId")String sdoId,
+                                             @RequestParam(name="subjectCode")String subjectCode){
         List<Map<String,String>> list1 = fileTemplateService.findShowField(fileType);
         Map<String,String> map = new HashMap<>();
         map.put("fieldName","updateTime");
         map.put("fieldTitle","日期");
         list1.add(map);
+        List<Map<String,String>> list2 = new ArrayList<>();
+        cn.csdb.model.Resource res = sdoService.getBysubjectCode(subjectCode);
+        String[] filePath = res.getFilePath().split(";");
+        for(String filePathString:filePath){
+            Map<String,String> map1 = new HashMap<>();
+            String s = filePathString.substring(filePathString.lastIndexOf("%")+1);
+            map1.put("fileName",s);
+            map1.put("size","0.1M");
+            map1.put("recordNum","0");
+            list2.add(map1);
+        }
+
+/*
         List<Map<String,String>> list2 = fileInfoService.getFileByCondition(list1,pid,fileName,fileType,pageNum,sdoId);
+*/
         long totalCount =fileInfoService.getTotalNumByCondition();
         long pageSum = totalCount%10==0?totalCount/10:totalCount/10+1;
         Map<String,Object> m = new HashMap<>();
