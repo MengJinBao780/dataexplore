@@ -51,7 +51,10 @@ public class ResourceController {
     @ResponseBody
     @RequestMapping(value = "relationalDatabaseTableList")
     public JSONObject relationalDatabaseTableList(HttpSession session) {
+/*
         String subjectCode = session.getAttribute("SubjectCode").toString();
+*/
+        String subjectCode = "student";
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
