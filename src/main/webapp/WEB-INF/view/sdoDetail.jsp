@@ -174,26 +174,10 @@
                                     <div style="float: left;width: 15%;color: #2E8719;font-weight: bold;font-size: 16px;line-height: 35px">
                                         显示列：
                                     </div>
-                                    <div style="float: left;width: 10%;line-height: 35px">
-                                        <input type="checkbox" id="selectAll">全选
+                                    <div style="float: left;width: 10%;line-height: 35px" id="selectAllTab">
+
                                     </div>
                                     <div style="float: left;width: 74%;line-height: 35px;word-break: break-all" id="selectTab">
-                                        <%--<div class="cus_che">
-                                            <input type="checkbox" name="box" value="aaaa">
-                                            <span>全选</span>
-                                        </div>
-                                        <div class="cus_che">
-                                            <input type="checkbox" name="box" value="aaaa">
-                                            <span>全选</span>
-                                        </div>
-                                        <div class="cus_che">
-                                            <input type="checkbox"  name="box" value="aaaa">
-                                            <span>全选</span>
-                                        </div>
-                                        <div class="cus_che">
-                                            <input type="checkbox"  name="box" value="aaaa">
-                                            <span>全选</span>
-                                        </div>--%>
                                     </div>
                                 </div>
                                 <div style="overflow: hidden;position: relative">
@@ -226,7 +210,7 @@
                                     </div>
                                     <div style="position: absolute;right: 0;bottom: 0;line-height: 35px;height: 35px">
                                         <span style="color: #0a96da;cursor: pointer" onclick="addSelectConditions()">+增加检索条件</span>
-                                        <button style="margin: 0 10px;" class="cus_btn">检索</button>
+                                        <button style="margin: 0 10px;" class="cus_btn" id="retrieve">检索</button>
                                     </div>
                                 </div>
 
@@ -725,7 +709,7 @@
 <script type="text/html" id="resourceTmp1">
     {{each tableInfos as value i}}
     <div class="cus_che">
-        <input type="checkbox"  name="box" value="{{value.columnName}}">
+        <input type="checkbox"  name="box" value="{{value.columnName}}" checked="checked" >
         <span>{{value.columnName}}</span>
     </div>
     {{/each}}
@@ -748,17 +732,6 @@
     {{/each}}
     <th style="background-color: #64aed9;color: #FFFFFF;">操作</th>
 </script>
-<%--<script type="text/html" id="resourceTmpTableBody">
-    {{each datas as value i}}
-        <tr>
-            {{each tableInfos as info i}}
-            <th >{{value.({{info.columnName}})}}</th>
-            {{/each}}
-            <th>详情</th>
-        </tr>
-
-    {{/each}}
-</script>--%>
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
@@ -1113,14 +1086,14 @@
         <!-- 新mysql类型-->
 
         //给全选的复选框添加事件
-        $("#selectAll").click(function(){
+        $("#selectAllTab").delegate("#selectAll","click",function () {
             // this 全选的复选框
             var userids=this.checked;
             //获取name=box的复选框 遍历输出复选框
             $("input[name=box]").each(function(){
                 this.checked=userids;
             });
-        });
+        })
         //给name=box的复选框绑定单击事件
         $("#selectTab").delegate("[name=box]","click",function () {
             var length=$("input[name=box]:checked").length;
@@ -1132,7 +1105,9 @@
                 $("#selectAll").prop("checked",false);
             }
         })
-
+        $("#retrieve").click(function () {
+            tableConfiguration2(1,"ResourceGenId")
+        })
         function addSelectConditions() {
             var html = template("resourceTmp2", selectList);
             $("#dataset-list").append(html);
@@ -1179,6 +1154,7 @@
                         for(var i=0;i<tableInfosList.tableInfos.length;i++){
                             selectList.items.push(tableInfosList.tableInfos[i].columnName)
                         }
+                        $("#selectAllTab").append("<input type='checkbox' id='selectAll' checked='checked'>全选")
                         var html = template("resourceTmp1", tableInfosList);
                         $("#selectTab").append(html)
                         var initSelectStr="<option value=''>--列名--</option>"
@@ -1189,7 +1165,7 @@
 
                     }
                 })
-                tableConfiguration2(1)
+                tableConfiguration2(1,"")
 
             }
         })
@@ -1217,6 +1193,7 @@
                 success:function (data) {
 
                     var tableInfosList = JSON.parse(data)
+                    $("#selectAllTab").empty()
                     $("#selectTab").empty()
                     $("#initSelect").empty()
                     $("#dataset-list").empty()
@@ -1224,6 +1201,7 @@
                     for(var i=0;i<tableInfosList.tableInfos.length;i++){
                         selectList.items.push(tableInfosList.tableInfos[i].columnName)
                     }
+                    $("#selectAllTab").append("<input type='checkbox' id='selectAll' checked='checked'>全选")
                     var html = template("resourceTmp1", tableInfosList);
                     $("#selectTab").append(html)
                     var initSelectStr="<option value=''>--列名--</option>"
@@ -1234,10 +1212,10 @@
                     
                 }
             })
-            tableConfiguration2(1)
+            tableConfiguration2(1,"")
         })
 
-        function tableConfiguration2(num) {
+        function tableConfiguration2(num,columnStr) {
             $.ajax({
                 url: "${ctx}/sdo/getTableFieldComs",
                 type: "GET",
@@ -1245,10 +1223,9 @@
                     pageNo: num,
                     subjectCode: "student",
                     tableName:tableName,
-                    columnName:""
+                    columnName:columnStr
                 },
                 success: function (data) {
-                    console.log("bbbbbb"+data)
                     var DataList = JSON.parse(data);
                     console.log(DataList)
                     $("."+tableName+":eq(0)").empty()
