@@ -175,7 +175,7 @@
                                         显示列：
                                     </div>
                                     <div style="float: left;width: 10%;line-height: 35px">
-                                        <input type="checkbox" id="selectAll" checked="checked">全选
+                                        <input type="checkbox" id="selectAll">全选
                                     </div>
                                     <div style="float: left;width: 74%;line-height: 35px;word-break: break-all" id="selectTab">
                                         <%--<div class="cus_che">
@@ -725,7 +725,7 @@
 <script type="text/html" id="resourceTmp1">
     {{each tableInfos as value i}}
     <div class="cus_che">
-        <input type="checkbox"  name="box" value="{{value.columnName}}" checked="checked">
+        <input type="checkbox"  name="box" value="{{value.columnName}}">
         <span>{{value.columnName}}</span>
     </div>
     {{/each}}
