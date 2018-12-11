@@ -7,10 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: DataSync
@@ -67,7 +64,10 @@ public class MySqlDataSource extends IDataSource{
 
     @Override
     public Map<String, Map<String, String>> getTableColumns(Connection connection, String databaseName, String tableName) {
+/*
         Map<String, Map<String, String>> colInfos = new HashMap<String, Map<String, String>>();
+*/
+        Map<String, Map<String, String>> colInfos = new LinkedHashMap<>();
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement("SELECT  COLUMN_NAME ,DATA_TYPE,COLUMN_TYPE,COLUMN_COMMENT FROM information_schema.`COLUMNS` where" +

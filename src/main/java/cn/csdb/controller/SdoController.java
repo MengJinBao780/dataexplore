@@ -1005,7 +1005,6 @@ public class SdoController {
             @RequestParam String tableName,
             @RequestParam String subjectCode,
             @RequestParam(value = "pageNo",defaultValue = "1") int pageNo) {
-        logger.info("预览表数据");
         JSONObject jsonObject = new JSONObject();
         List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(null,tableName ,subjectCode, 0 , pageNo);
         Map<String,Object>rowData = datas.get(datas.size()-1);
