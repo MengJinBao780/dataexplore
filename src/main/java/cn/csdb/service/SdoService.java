@@ -484,4 +484,9 @@ public class SdoService {
     public Sdo getByTitle(String title){
         return  sdoDao.getByTitle(title);
     }
+
+    //根据subjectCode获取实体信息
+    public cn.csdb.model.Resource getBysubjectCode(String subjectCode){
+        return sdoDao.getBySubjectCode(subjectCode);
+    }
 }

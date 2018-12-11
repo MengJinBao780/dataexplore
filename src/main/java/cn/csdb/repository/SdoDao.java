@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,11 @@ public class SdoDao {
         basicQuery.with(new Sort(orders));
         List<Sdo> list = mongoTemplate.find(basicQuery, Sdo.class);
         return list;
+    }
+
+    //根据subjectCode获取实体类
+    public cn.csdb.model.Resource getBySubjectCode(String subjectCode){
+        return mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),cn.csdb.model.Resource.class).get(0);
     }
 
     //排序并获取前15条sdo集合

@@ -2,9 +2,11 @@ package cn.csdb.controller;
 import cn.csdb.model.*;
 import cn.csdb.service.SdoService;
 import cn.csdb.utils.UrlUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import cn.csdb.service.*;
+import com.google.common.collect.Maps;
 import com.sun.org.apache.bcel.internal.generic.INEG;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -435,13 +437,28 @@ public class SdoController {
                                              @RequestParam(name = "fileName", defaultValue = "")String fileName,
                                              @RequestParam(name = "fileType", defaultValue = "xlsx")String fileType,
                                              @RequestParam(name = "pageNum", defaultValue = "1")Integer pageNum,
-                                             @RequestParam(name ="sdoId")String sdoId){
+                                             @RequestParam(name ="sdoId")String sdoId,
+                                             @RequestParam(name="subjectCode")String subjectCode){
         List<Map<String,String>> list1 = fileTemplateService.findShowField(fileType);
         Map<String,String> map = new HashMap<>();
         map.put("fieldName","updateTime");
         map.put("fieldTitle","日期");
         list1.add(map);
+        List<Map<String,String>> list2 = new ArrayList<>();
+        cn.csdb.model.Resource res = sdoService.getBysubjectCode(subjectCode);
+        String[] filePath = res.getFilePath().split(";");
+        for(String filePathString:filePath){
+            Map<String,String> map1 = new HashMap<>();
+            String s = filePathString.substring(filePathString.lastIndexOf("%")+1);
+            map1.put("fileName",s);
+            map1.put("size","0.1M");
+            map1.put("recordNum","0");
+            list2.add(map1);
+        }
+
+/*
         List<Map<String,String>> list2 = fileInfoService.getFileByCondition(list1,pid,fileName,fileType,pageNum,sdoId);
+*/
         long totalCount =fileInfoService.getTotalNumByCondition();
         long pageSum = totalCount%10==0?totalCount/10:totalCount/10+1;
         Map<String,Object> m = new HashMap<>();
@@ -942,13 +959,41 @@ public class SdoController {
     //获取表字段信息
     @ResponseBody
     @RequestMapping(value = "getTableFieldComs")
-    public JSONObject getFieldComsByTableName(String subjectCode, String tableName) {
+    public JSONObject getFieldComsByTableName(String subjectCode,
+                                              String tableName,
+                                              @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
+                                              @RequestParam(required = false, defaultValue = "10") int pageSize) {
         JSONObject jsonObject = new JSONObject();
         Map<String, List<TableInfo>> fieldComsByTableName = tableFieldComsService.getDefaultFieldComsByTableName(subjectCode, tableName);
         if (fieldComsByTableName != null) {
             List<TableInfo> tableInfos = fieldComsByTableName.get(tableName);
             jsonObject.put("tableInfos", tableInfos);
         }
+        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+        jsonObject.put("datas", datas);
+        jsonObject.put("totalCount",datas.size());
+        jsonObject.put("currentPage",pageNo);
+        jsonObject.put("pageSize",pageSize);
+        jsonObject.put("totalPages",datas.size() % pageSize == 0 ? datas.size() / pageSize : datas.size() / pageSize + 1);
+        return jsonObject;
+    }
+
+    //获取表字段内容
+    @ResponseBody
+    @RequestMapping(value = "/getRelationalDatabaseByTableName")
+    public JSONObject previewRelationalDatabaseByTableName(
+            @RequestParam String tableName,
+            @RequestParam String subjectCode,
+            @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
+            @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        logger.info("预览表数据");
+        JSONObject jsonObject = new JSONObject();
+        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+        jsonObject.put("datas", datas);
+        jsonObject.put("totalCount",datas.size());
+        jsonObject.put("currentPage",pageNo);
+        jsonObject.put("pageSize",pageSize);
+        jsonObject.put("totalPages",datas.size() % pageSize == 0 ? datas.size() / pageSize : datas.size() / pageSize + 1);
         return jsonObject;
     }
 }

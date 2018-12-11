@@ -12,6 +12,7 @@ import cn.csdb.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.PropertyFilter;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.hash.Hashing;
 import org.apache.commons.collections.ListUtils;
@@ -22,11 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 
 
 /**
@@ -130,6 +128,50 @@ public class TableFieldComsService {
         String port = dataSrc.getPort();
         String databaseName = dataSrc.getDatabaseName();
         return Joiner.on(URISPLIT).skipNulls().join(host, port, databaseName, tableName);
+    }
+
+    public List<Map<String,Object>> getDataBySql(String sql, String SubjectCode, int start, int limit) {
+        Subject subject = checkUserDao.getSubjectByCode(SubjectCode);
+        DataSrc datasrc = new DataSrc();
+        datasrc.setDatabaseName(subject.getDbName());
+        datasrc.setDatabaseType("mysql");
+        datasrc.setHost(subject.getDbHost());
+        datasrc.setPort(subject.getDbPort());
+        datasrc.setUserName(subject.getDbUserName());
+        datasrc.setPassword(subject.getDbPassword());
+        IDataSource dataSource = DataSourceFactory.getDataSource(datasrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(datasrc.getHost(), datasrc.getPort(),
+                datasrc.getUserName(), datasrc.getPassword(), datasrc.getDatabaseName());
+        PreparedStatement paginationSql = dataSource.getPaginationSql(connection, sql, null, start, limit);
+        List<Map<String,Object>> list = new ArrayList<>();
+        try {
+            ResultSet resultSet = paginationSql.executeQuery();
+            //遍历resultset
+            ResultSetMetaData rsmd = resultSet.getMetaData();
+            int count = rsmd.getColumnCount();
+            while (resultSet.next()) {
+                Map rowData = new HashMap();//声明Map
+                for (int i = 1; i <= count; i++) {
+                    System.out.println(rsmd.getColumnName(i)+"="+resultSet.getObject(i));
+                    rowData.put(rsmd.getColumnName(i), resultSet.getObject(i));//获取键名及值
+                }
+                list.add(rowData);
+            }
+            System.out.println("list = " + list.size());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+
+            }
+        }
+        return list;
+    }
+
+    public List<Map<String,Object>> getDataByTable(String tableName, String SubjectCode, int start, int limit) {
+        return getDataBySql("select * from " + tableName, SubjectCode, start, limit);
     }
 
 }
