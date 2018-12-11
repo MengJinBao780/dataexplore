@@ -2,9 +2,11 @@ package cn.csdb.controller;
 import cn.csdb.model.*;
 import cn.csdb.service.SdoService;
 import cn.csdb.utils.UrlUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import cn.csdb.service.*;
+import com.google.common.collect.Maps;
 import com.sun.org.apache.bcel.internal.generic.INEG;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -957,13 +959,41 @@ public class SdoController {
     //获取表字段信息
     @ResponseBody
     @RequestMapping(value = "getTableFieldComs")
-    public JSONObject getFieldComsByTableName(String subjectCode, String tableName) {
+    public JSONObject getFieldComsByTableName(String subjectCode,
+                                              String tableName,
+                                              @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
+                                              @RequestParam(required = false, defaultValue = "10") int pageSize) {
         JSONObject jsonObject = new JSONObject();
         Map<String, List<TableInfo>> fieldComsByTableName = tableFieldComsService.getDefaultFieldComsByTableName(subjectCode, tableName);
         if (fieldComsByTableName != null) {
             List<TableInfo> tableInfos = fieldComsByTableName.get(tableName);
             jsonObject.put("tableInfos", tableInfos);
         }
+        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+        jsonObject.put("datas", datas);
+        jsonObject.put("totalCount",datas.size());
+        jsonObject.put("currentPage",pageNo);
+        jsonObject.put("pageSize",pageSize);
+        jsonObject.put("totalPages",datas.size() % pageSize == 0 ? datas.size() / pageSize : datas.size() / pageSize + 1);
+        return jsonObject;
+    }
+
+    //获取表字段内容
+    @ResponseBody
+    @RequestMapping(value = "/getRelationalDatabaseByTableName")
+    public JSONObject previewRelationalDatabaseByTableName(
+            @RequestParam String tableName,
+            @RequestParam String subjectCode,
+            @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
+            @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        logger.info("预览表数据");
+        JSONObject jsonObject = new JSONObject();
+        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+        jsonObject.put("datas", datas);
+        jsonObject.put("totalCount",datas.size());
+        jsonObject.put("currentPage",pageNo);
+        jsonObject.put("pageSize",pageSize);
+        jsonObject.put("totalPages",datas.size() % pageSize == 0 ? datas.size() / pageSize : datas.size() / pageSize + 1);
         return jsonObject;
     }
 }
