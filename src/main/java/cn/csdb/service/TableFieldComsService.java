@@ -170,8 +170,21 @@ public class TableFieldComsService {
         return list;
     }
 
-    public List<Map<String,Object>> getDataByTable(String tableName, String SubjectCode, int start, int limit) {
-        return getDataBySql("select * from " + tableName, SubjectCode, start, limit);
+    public List<Map<String,Object>> getDataByTable(String[]column,String tableName, String SubjectCode, int start, int limit) {
+        int n = 0;
+        for(String s:column){
+            n++;
+        }
+        String sql = "select ";
+        for(String s1:column){
+            if(n>1){
+                sql = sql + s1 + ",";
+                n--;
+            }else{
+                sql = sql + s1;
+            }
+        }
+        sql = sql + " from ";
+        return getDataBySql(sql + tableName, SubjectCode, start, limit);
     }
-
 }
