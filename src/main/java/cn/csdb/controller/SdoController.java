@@ -998,22 +998,18 @@ public class SdoController {
         return jsonObject;
     }
 
-    //获取表字段内容
+    //获取表字段单行内容
     @ResponseBody
     @RequestMapping(value = "/getRelationalDatabaseByTableName")
     public JSONObject previewRelationalDatabaseByTableName(
             @RequestParam String tableName,
             @RequestParam String subjectCode,
-            @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
-            @RequestParam(required = false, defaultValue = "10") int pageSize) {
+            @RequestParam(value = "pageNo",defaultValue = "1") int pageNo) {
         logger.info("预览表数据");
         JSONObject jsonObject = new JSONObject();
-        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(null,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
-        jsonObject.put("datas", datas);
-        jsonObject.put("totalCount",datas.size());
-        jsonObject.put("currentPage",pageNo);
-        jsonObject.put("pageSize",pageSize);
-        jsonObject.put("totalPages",datas.size() % pageSize == 0 ? datas.size() / pageSize : datas.size() / pageSize + 1);
+        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(null,tableName ,subjectCode, 0 , pageNo);
+        Map<String,Object>rowData = datas.get(datas.size()-1);
+        jsonObject.put("rowData", rowData);
         return jsonObject;
     }
 }
