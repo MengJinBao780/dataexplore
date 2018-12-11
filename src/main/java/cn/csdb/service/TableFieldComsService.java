@@ -151,7 +151,7 @@ public class TableFieldComsService {
             int count = rsmd.getColumnCount();
             while (resultSet.next()) {
                 Map rowData = new HashMap();//声明Map
-                for (int i = 1; i <= count; i++) {
+                for (int i = count; i >= 1; i--) {
                     System.out.println(rsmd.getColumnName(i)+"="+resultSet.getObject(i));
                     rowData.put(rsmd.getColumnName(i), resultSet.getObject(i));//获取键名及值
                 }
@@ -170,8 +170,21 @@ public class TableFieldComsService {
         return list;
     }
 
-    public List<Map<String,Object>> getDataByTable(String tableName, String SubjectCode, int start, int limit) {
-        return getDataBySql("select * from " + tableName, SubjectCode, start, limit);
+    public List<Map<String,Object>> getDataByTable(String[]column,String tableName, String SubjectCode, int start, int limit) {
+        int n = 0;
+        for(String s:column){
+            n++;
+        }
+        String sql = "select ";
+        for(String s1:column){
+            if(n>1){
+                sql = sql + s1 + ",";
+                n--;
+            }else{
+                sql = sql + s1;
+            }
+        }
+        sql = sql + " from ";
+        return getDataBySql(sql + tableName, SubjectCode, start, limit);
     }
-
 }

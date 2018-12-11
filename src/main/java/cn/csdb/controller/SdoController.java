@@ -961,6 +961,7 @@ public class SdoController {
     @RequestMapping(value = "getTableFieldComs")
     public JSONObject getFieldComsByTableName(String subjectCode,
                                               String tableName,
+                                              String columnName,
                                               @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
                                               @RequestParam(required = false, defaultValue = "10") int pageSize) {
         JSONObject jsonObject = new JSONObject();
@@ -969,7 +970,13 @@ public class SdoController {
             List<TableInfo> tableInfos = fieldComsByTableName.get(tableName);
             jsonObject.put("tableInfos", tableInfos);
         }
-        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+        List<Map<String,Object>> datas = new ArrayList<>();
+        if(columnName==""||columnName==null){
+            datas = tableFieldComsService.getDataByTable(null,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+        }else{
+            String[] s = columnName.split(",");
+            datas = tableFieldComsService.getDataByTable(s,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+        }
         jsonObject.put("datas", datas);
         jsonObject.put("totalCount",datas.size());
         jsonObject.put("currentPage",pageNo);
@@ -988,7 +995,7 @@ public class SdoController {
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
         logger.info("预览表数据");
         JSONObject jsonObject = new JSONObject();
-        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(null,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
         jsonObject.put("datas", datas);
         jsonObject.put("totalCount",datas.size());
         jsonObject.put("currentPage",pageNo);
