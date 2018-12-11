@@ -63,7 +63,7 @@
        }
         .cus_che{
             float: left;
-            width: 14%;
+            width: 22%;
         }
         .cus_bor{
             border: 1px solid #ddd;
@@ -155,7 +155,7 @@
                 <div class="clear"></div>
             </div>
             <div class="line"></div>
-            <div id="table-form" style="display: none">
+            <div id="table-form" style="display: none;margin-bottom: 20px">
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     <div class="panel">
                         <div  role="tab" id="headingOne" style="overflow: hidden">
@@ -174,49 +174,23 @@
                                     <div style="float: left;width: 10%;line-height: 35px">
                                         <input type="checkbox" id="selectAll">全选
                                     </div>
-                                    <div style="float: left;width: 74%;line-height: 35px;">
-                                        <div class="cus_che">
-                                            <input type="checkbox" >
-                                            <span>全选</span>
-                                        </div>
-
-                                        <div class="cus_che">
-                                            <input type="checkbox">
+                                    <div style="float: left;width: 74%;line-height: 35px;word-break: break-all" id="selectTab">
+                                        <%--<div class="cus_che">
+                                            <input type="checkbox" name="box" value="aaaa">
                                             <span>全选</span>
                                         </div>
                                         <div class="cus_che">
-                                            <input type="checkbox">
+                                            <input type="checkbox" name="box" value="aaaa">
                                             <span>全选</span>
                                         </div>
                                         <div class="cus_che">
-                                            <input type="checkbox">
+                                            <input type="checkbox"  name="box" value="aaaa">
                                             <span>全选</span>
                                         </div>
                                         <div class="cus_che">
-                                            <input type="checkbox">
+                                            <input type="checkbox"  name="box" value="aaaa">
                                             <span>全选</span>
-                                        </div>
-                                        <div class="cus_che">
-                                            <input type="checkbox">
-                                            <span>全选</span>
-                                        </div>
-                                        <div class="cus_che">
-                                            <input type="checkbox">
-                                            <span>全选</span>
-                                        </div>
-                                        <div class="cus_che">
-                                            <input type="checkbox">
-                                            <span>全选</span>
-                                        </div>
-                                        <div class="cus_che">
-                                            <input type="checkbox">
-                                            <span>全选</span>
-                                        </div>
-                                        <div class="cus_che">
-                                            <input type="checkbox">
-                                            <span>全选</span>
-                                        </div>
-
+                                        </div>--%>
                                     </div>
                                 </div>
                                 <div style="overflow: hidden;position: relative">
@@ -225,21 +199,27 @@
                                     </div>
                                     <div style="float: left;width: 65%;">
                                         <div style="overflow: hidden">
-                                            <div style="float: left;width: 60%;text-align: center">
-                                                <select name="" style="width: 93px" class="cus_input" id="bbb">
-                                                    <option value="">aaaaa</option>
-                                                    <option value="">bbbbb</option>
+                                            <div style="float: left;width: 60%;text-align: right">
+                                                <select name="" style="width: 100px" class="cus_input" id="initSelect">
+                                                    <%--<option value="">请选择列</option>
+                                                    <option value="">bbbbb</option>--%>
                                                 </select>
-                                                <select name="" style="width: 93px" class="cus_input" id="ccc">
-                                                    <option value="">aaaaa</option>
-                                                    <option value="">bbbbb</option>
+                                                <select name="" style="width: 100px" class="cus_input">
+                                                    <option value="">--条件--</option>
+                                                    <option value="">包含(like)</option>
+                                                    <option value="">小于等于</option>
+                                                    <option value="">大于等于</option>
+                                                    <option value="">等于</option>
+                                                    <option value="">在--中</option>
                                                 </select>
                                             </div>
                                             <div style="float: left;width:40%;text-align: center">
                                                 <input class="cus_input" type="text">
                                             </div>
                                         </div>
+                                        <div id="dataset-list">
 
+                                        </div>
                                     </div>
                                     <div style="position: absolute;right: 0;bottom: 0;line-height: 35px;height: 35px">
                                         <span style="color: #0a96da;cursor: pointer" onclick="addSelectConditions()">+增加检索条件</span>
@@ -255,7 +235,7 @@
                     <div class="tabbable-custom ">
                         <!-- tab header --->
                         <ul class="nav nav-tabs">
-                            <li class="active" value="0">
+                            <%--<li class="active" value="0">
                                 <a href="#undescribe" data-toggle="tab">
                                     待描述数据表 </a>
                             </li>
@@ -266,23 +246,21 @@
                             <li value="2">
                                 <a href="#filedata" data-toggle="tab">
                                     文件数据</a>
-                            </li>
+                            </li>--%>
                         </ul>
                         <!--tab content-->
                         <div class="tab-content">
-
-                            <!--用户管理标签页-->
+                            <%--<!--用户管理标签页-->
                             <div class="tab-pane cus_bor active" id="undescribe" style="min-height: 400px">
                                 aaaaaaaaaaaaaaaaaaa
                             </div>
-
                             <!--group tab-->
                             <div class="tab-pane cus_bor" id="isdescribe" style="min-height: 400px">
                                 ssssssssssssssssssssssssssssssssss
                             </div>
                             <div class="tab-pane cus_bor" id="filedata" style="min-height: 400px">
                                dddddddddddddddddddddddddddddddd
-                            </div>
+                            </div>--%>
                         </div>
                     </div>
                 </div>
@@ -712,20 +690,28 @@
     </div>
 </div>
 
-<script type="text/html" id="resourceTmpl">
+<script type="text/html" id="resourceTmp2">
     <div style="overflow: hidden">
-        <div style="float: left;width: 60%;text-align: center">
-            <select name="" style="width: 93px" class="cus_input" >
-                <option value="">aaaaa</option>
-                <option value="">bbbbb</option>
+        <div style="float: left;width: 60%;text-align: right">
+            <select name="" style="width:100px" class="cus_input" >
+                <option value="&">并且</option>
+                <option value="||">或者</option>
             </select>
-            <select name="" style="width: 93px" class="cus_input" >
-                <option value="">aaaaa</option>
-                <option value="">bbbbb</option>
+
+            <select name="" style="width: 100px" class="cus_input" >
+                <option value="">--列名--</option>
+                {{each items as value i}}
+                <option value="{{value}}">{{value}}</option>
+                {{/each}}
             </select>
-            <select name="" style="width: 93px" class="cus_input" >
-                <option value="">aaaaa</option>
-                <option value="">bbbbb</option>
+
+            <select name="" style="width: 100px" class="cus_input" >
+                <option value="">--条件--</option>
+                <option value="">包含(like)</option>
+                <option value="">小于等于</option>
+                <option value="">大于等于</option>
+                <option value="">等于</option>
+                <option value="">在--中</option>
             </select>
         </div>
         <div style="float: left;width:40%;text-align: center">
@@ -733,7 +719,27 @@
         </div>
     </div>
 </script>
-
+<script type="text/html" id="resourceTmp1">
+    {{each tableInfos as value i}}
+    <div class="cus_che">
+        <input type="checkbox"  name="box" value="{{value.columnName}}">
+        <span>{{value.columnName}}</span>
+    </div>
+    {{/each}}
+</script>
+<script type="text/html" id="resourceTmp4">
+    {{each list as value i}}
+    {{if i ==0}}
+    <div class="tab-pane cus_bor active" id="{{value}}" style="min-height: 400px">
+        {{value}}
+    </div>
+    {{else if i !=0}}
+    <div class="tab-pane cus_bor " id="{{value}}" style="min-height: 400px">
+        {{value}}
+    </div>
+    {{/if}}
+    {{/each}}
+</script>
 
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
@@ -756,7 +762,11 @@
         $("#second").addClass("active");
         $("#third").removeClass("active");
         var keyWords = JSON.parse(sessionStorage.getItem("keyWords"));
-        var selectList=[];
+        var selectList={
+            items:[],
+            isTrue:[]
+        }
+        var tableName=""
         $(".collapse").on('shown.bs.collapse', function () {
             $("#tabStyOne").text("收缩")
             $("#tabStyTwo").css("transform","rotate(0deg)")
@@ -765,8 +775,6 @@
             $("#tabStyOne").text("展开")
             $("#tabStyTwo").css("transform","rotate(180deg)")
         })
-
-
         $(function () {
             visitSdo();
             getScoreList(1);
@@ -1085,34 +1093,215 @@
             })
         }
         <!-- 新mysql类型-->
+
+        //给全选的复选框添加事件
+        $("#selectAll").click(function(){
+            // this 全选的复选框
+            var userids=this.checked;
+            //获取name=box的复选框 遍历输出复选框
+            $("input[name=box]").each(function(){
+                this.checked=userids;
+            });
+        });
+        //给name=box的复选框绑定单击事件
+        $("#selectTab").delegate("[name=box]","click",function () {
+            var length=$("input[name=box]:checked").length;
+            //未选中的长度
+            var len=$("input[name=box]").length;
+            if(length==len){
+                $("#selectAll").prop("checked",true);
+            }else{
+                $("#selectAll").prop("checked",false);
+            }
+        })
+
         function addSelectConditions() {
-            
+            var html = template("resourceTmp2", selectList);
+            $("#dataset-list").append(html);
         }
 
         $.ajax({
             url:"${ctx}/resource/relationalDatabaseTableList",
             type:"GET",
             success:function (data) {
-                console.log(data)
+               var List = JSON.parse(data)
+                 tableName = List.list[0]
+
+                var navTabStr ="";
+                for(var i=0;i<List.list.length;i++){
+                    if(i==0){
+                        navTabStr+="<li class='active'><a href=#"+List.list[i]+" data-toggle='tab'>"+List.list[i] +"</a></li>"
+                    }else {
+                        navTabStr+="<li><a href=#"+List.list[i]+" data-toggle='tab'>"+List.list[i] +"</a></li>"
+                    }
+                }
+                $(".nav-tabs").append(navTabStr);
+                var html2 = template("resourceTmp4", List);
+                $(".tab-content").append(html2);
+                console.log(tableName.indexOf(selectList.isTrue))
+                if( selectList.isTrue.indexOf(tableName) == -1){
+                    var tabStr = ""
+                    tabStr+="<table class='table table-bordered data-table'><thead><tr class="+tableName+">"+
+                        "</tr></thead><tbody kid="+tableName +"></tbody></table>"+
+                        "            <div class='row margin-top-20 '><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
+                        "</div><div class="+tableName+" style='float: right; padding-right: 15px;'>"+tableName+"</div></div>"
+                    $("#"+tableName).append(tabStr)
+                    selectList.isTrue.push(tableName)
+                }
+
+                $.ajax({
+                    url:"${ctx}/sdo/getTableFieldComs",
+                    type:"POST",
+                    data:{
+                        subjectCode:"student",
+                        tableName:tableName
+                    },
+                    success:function (data) {
+                        var tableInfosList = JSON.parse(data)
+                        for(var i=0;i<tableInfosList.tableInfos.length;i++){
+                            selectList.items.push(tableInfosList.tableInfos[i].columnName)
+                        }
+                        var html = template("resourceTmp1", tableInfosList);
+                        $("#selectTab").append(html)
+                        var initSelectStr="<option value=''>--列名--</option>"
+                        for(var i=0;i<selectList.items.length;i++){
+                            initSelectStr+="<option value="+selectList.items[i]+">"+selectList.items[i]+"</option>"
+                        }
+                        $("#initSelect").append(initSelectStr)
+
+                        /*$.ajax({
+                            url:"",
+                            type:"GET",
+                            data:{
+                                subjectCode:"student",
+                                tableName:tableName
+                            },
+                            success:function (data) {
+                                $("#"+tableName).
+                            }
+                        })*/
+                    }
+                })
+
             }
         })
-        /*$.ajax({
-            url:"${ctx}/sdo/getTableFieldComs",
-            type:"POST",
-            data:{
-                subjectCode:"",
-                tableName:""
-            },
-            success:function (data) {
-                console.log(data)
+        $(".nav-tabs").delegate("a","click",function () {
+            /*e.preventDefault()*/
+
+            tableName = $(this).text()
+            if( selectList.isTrue.indexOf(tableName) == -1){
+                var tabStr = ""
+                tabStr+="<table class='table table-bordered data-table'><thead><tr class="+tableName+">"+
+                    "</tr></thead><tbody kid="+tableName +"></tbody></table>"+
+                    "            <div class='row margin-top-20 '><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
+                    "</div><div class="+tableName+" style='float: right; padding-right: 15px;'>"+tableName+"</div></div>"
+                $("#"+tableName).append(tabStr)
+                selectList.isTrue.push(tableName)
             }
-        })*/
+            /*var tabStr = ""
+            tabStr+="<table class='table table-bordered data-table'><thead><tr class="+tableName+">"+
+                "</tr></thead><tbody kid="+tableName +"></tbody></table>"+
+                "            <div class='row margin-top-20 '><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
+                "</div><div class="+tableName+" style='float: right; padding-right: 15px;'>"+tableName+"</div></div>"
+            $("#"+tableName).append(tabStr)*/
+            $.ajax({
+                url:"${ctx}/sdo/getTableFieldComs",
+                type:"POST",
+                data:{
+                    subjectCode:"student",
+                    tableName:tableName
+                },
+                success:function (data) {
+
+                    var tableInfosList = JSON.parse(data)
+                    $("#selectTab").empty()
+                    $("#initSelect").empty()
+                    $("#dataset-list").empty()
+                    selectList.items=[]
+                    for(var i=0;i<tableInfosList.tableInfos.length;i++){
+                        selectList.items.push(tableInfosList.tableInfos[i].columnName)
+                    }
+                    var html = template("resourceTmp1", tableInfosList);
+                    $("#selectTab").append(html)
+                    var initSelectStr="<option value=''>--列名--</option>"
+                    for(var i=0;i<selectList.items.length;i++){
+                        initSelectStr+="<option value="+selectList.items[i]+">"+selectList.items[i]+"</option>"
+                    }
+                    $("#initSelect").append(initSelectStr)
+                    
+                }
+            })
+        })
+
+        function tableConfiguration2(num) {
+            $.ajax({
+                url: "${ctx}/resource/getPageData",
+                type: "GET",
+                data: {
+                    pageNo: num,
+                    pageSize: 10,
+                    tableName:tableName
+                },
+                success: function (data) {
+                    $("."+tableName).html("");
+                    var DataList = JSON.parse(data);
+                    console.log(DataList)
+                    var tabCon = template("resourceTmp1", DataList);
+                    $("#bd-data").append(tabCon);
+
+                    if (DataList.resourceList.length == 0) {
+                        $(".table-message").html("暂时没有数据");
+                        $(".page-message").html("");
+                        $(".page-list").html("");
+                        return
+                    }
+                    $(".table-message").html("");
+                    /*
+                    * 创建table
+                    * */
+                    if ($(".page-list .bootpag").length != 0) {
+                        $(".page-list").off();
+                        $('.page-list').empty();
+                    }
+                    $(".page-message").html("当前第<span style='color:blue'>" + DataList.currentPage + "</span>页,共<span style='color:blue'>" + DataList.totalPages + "</span>页,共<span style='color:blue'>" + DataList.totalCount + "</span>条数据");
+                    $('.page-list').bootpag({
+                        total: DataList.totalPages,
+                        page: DataList.currentPage,
+                        maxVisible: 5,
+                        leaps: true,
+                        firstLastUse: true,
+                        first: '首页',
+                        last: '尾页',
+                        wrapClass: 'pagination',
+                        activeClass: 'active',
+                        disabledClass: 'disabled',
+                        nextClass: 'next',
+                        prevClass: 'prev',
+                        lastClass: 'last',
+                        firstClass: 'first'
+                    }).on('page', function (event, num) {
+                        tableConfiguration2(num,publicType,resourceState,resourceName);
+                    });
+                },
+                error: function () {
+                    console.log("请求失败")
+                }
+            })
+
+
+        }
         
         
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
         function htmlEncodeJQ(str) {
             return $('<span/>').text(str).html();
         }
