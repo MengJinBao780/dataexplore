@@ -761,8 +761,9 @@
         var selectList={
             items:[],
             isTrue:[]
-        }
-        var tableName=""
+        };
+        var tableName="";
+        var indexPage=1;
         $(".collapse").on('shown.bs.collapse', function () {
             $("#tabStyOne").text("收缩")
             $("#tabStyTwo").css("transform","rotate(0deg)")
@@ -1139,8 +1140,37 @@
                 $("#selectAll").prop("checked",false);
             }
         })
+        //检索
         $("#retrieve").click(function () {
-            tableConfiguration2(1,"ResourceGenId")
+            var length=$("input[name=box]:checked").length;
+            if(length == 0){
+                toastr["error"]("提示！", "请至少选择一个显示列");
+                return
+            }
+            var columnNameStr = selectList.items.toString()
+            tableConfiguration2(1,columnNameStr)
+        })
+        //详情
+        $(".tab-content").delegate(".seeDetails","click",function () {
+            var index = $(".seeDetails").index($(this))
+            var totalIndex=(indexPage-1)*10+(index+1)
+            console.log(totalIndex)
+            $.ajax({
+                url:"${ctx}/sdo/getRelationalDatabaseByTableName",
+                type:"GET",
+                data:{
+                    tableName:tableName,
+                    pageNo:totalIndex,
+                    subjectCode: "student"
+                },
+                success:function (data) {
+                    console.log(JSON.parse(data))
+
+                },
+                error:function () {
+                    console.log("查看详情失败")
+                }
+            })
         })
         function addSelectConditions() {
             var html = template("resourceTmp2", selectList);
@@ -1183,7 +1213,6 @@
                         tableName:tableName,
                     },
                     success:function (data) {
-                        console.log("aaaaaaaaaaaaaa"+data)
                         var tableInfosList = JSON.parse(data)
                         for(var i=0;i<tableInfosList.tableInfos.length;i++){
                             selectList.items.push(tableInfosList.tableInfos[i].columnName)
@@ -1250,6 +1279,7 @@
         })
 
         function tableConfiguration2(num,columnStr) {
+            indexPage=num
             $.ajax({
                 url: "${ctx}/sdo/getTableFieldComs",
                 type: "GET",
@@ -1279,7 +1309,7 @@
                             }
 
                         }
-                        tbodyStr+="<th>详情</th></tr>"
+                        tbodyStr+="<th><a href='javascript:void(0)' class='seeDetails' >详情</a></th></tr>"
                     }
                     $("[kid="+tableName+"]").append(tbodyStr);
                     /*if (DataList.resourceList.length == 0) {
