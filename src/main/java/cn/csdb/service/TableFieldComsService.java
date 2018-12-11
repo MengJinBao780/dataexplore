@@ -151,7 +151,7 @@ public class TableFieldComsService {
             int count = rsmd.getColumnCount();
             while (resultSet.next()) {
                 Map rowData = new HashMap();//声明Map
-                for (int i = 1; i <= count; i++) {
+                for (int i = count; i >= 1; i--) {
                     System.out.println(rsmd.getColumnName(i)+"="+resultSet.getObject(i));
                     rowData.put(rsmd.getColumnName(i), resultSet.getObject(i));//获取键名及值
                 }
