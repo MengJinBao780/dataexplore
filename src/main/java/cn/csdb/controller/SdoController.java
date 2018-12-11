@@ -968,7 +968,20 @@ public class SdoController {
         Map<String, List<TableInfo>> fieldComsByTableName = tableFieldComsService.getDefaultFieldComsByTableName(subjectCode, tableName);
         if (fieldComsByTableName != null) {
             List<TableInfo> tableInfos = fieldComsByTableName.get(tableName);
-            jsonObject.put("tableInfos", tableInfos);
+            if(columnName==""||columnName==null) {
+                jsonObject.put("tableInfos", tableInfos);
+            }else {
+                String[] s = columnName.split(",");
+                List<TableInfo> tableInfos1 = new ArrayList<>();
+                for (TableInfo tableInfo : tableInfos) {
+                    for(String column : s){
+                        if(column.equals(tableInfo.getColumnName())){
+                            tableInfos1.add(tableInfo);
+                        }
+                    }
+                }
+                jsonObject.put("tableInfos", tableInfos1);
+            }
         }
         List<Map<String,Object>> datas = new ArrayList<>();
         if(columnName==""||columnName==null){
