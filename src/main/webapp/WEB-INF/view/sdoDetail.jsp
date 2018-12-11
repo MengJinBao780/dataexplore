@@ -78,6 +78,9 @@
         table th{
             text-align: center;
         }
+        .modediv{
+            padding-top: 7px;
+        }
 
     </style>
 </head>
@@ -676,7 +679,24 @@
         </div>
     </div>
 </div>
-
+<div id="fileModal" class="modal fade" tabindex="-1" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">数据集详情查看</h4>
+            </div>
+            <div class="modal-body" style="max-height: 500px;overflow: auto">
+                <form class="form-horizontal" id="delSql">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" style="background-color: #e5e5e5" class="btn default">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/html" id="resourceTmp2">
     <div style="overflow: hidden">
         <div style="float: left;width: 60%;text-align: right">
@@ -705,6 +725,7 @@
             <input class="cus_input" type="text">
         </div>
     </div>
+
 </script>
 <script type="text/html" id="resourceTmp1">
     {{each tableInfos as value i}}
@@ -736,6 +757,11 @@
     <th style="background-color: #64aed9;color: #FFFFFF;">{{value.columnName}}</th>
     {{/each}}
     <th style="background-color: #64aed9;color: #FFFFFF;">操作</th>
+</script>
+<script type="text/html" id="resourceModel">
+    {{each items as value i}}
+    <div class="form-group"><label class="col-sm-3 control-label">版权声明:</label><div class="col-sm-8 modediv" id="file-createdByOrganization"></div></div>
+    {{/each}}
 </script>
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
@@ -1164,8 +1190,18 @@
                     subjectCode: "student"
                 },
                 success:function (data) {
-                    console.log(JSON.parse(data))
-
+                    var list = JSON.parse(data).rowData
+                    var keyList = []
+                    for(var key in list){
+                        keyList.push(key)
+                    }
+                    $("#delSql").empty()
+                    var html= ""
+                    for(var i=0;i<keyList.length;i++){
+                        html+="<div class='form-group'><label class='col-sm-3 control-label'>"+keyList[i]+":</label><div class='col-sm-8 modediv' id='file-createdByOrganization'>"+list[keyList[i]] +"</div></div>"
+                    }
+                    $("#delSql").append(html)
+                    $("#fileModal").modal("show")
                 },
                 error:function () {
                     console.log("查看详情失败")
