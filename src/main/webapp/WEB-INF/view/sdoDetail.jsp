@@ -187,7 +187,7 @@
                                     <div style="float: left;width: 65%;">
                                         <div style="overflow: hidden">
                                             <div style="float: left;width: 60%;text-align: right">
-                                                <select name="" style="width: 100px" class="cus_input" id="initSelect">
+                                                <select name="sameSel" style="width: 100px" class="cus_input" id="initSelect">
                                                     <%--<option value="">请选择列</option>
                                                     <option value="">bbbbb</option>--%>
                                                 </select>
@@ -685,7 +685,7 @@
                 <option value="||">或者</option>
             </select>
 
-            <select name="" style="width: 100px" class="cus_input" >
+            <select name="sameSel" style="width: 100px" class="cus_input" >
                 <option value="">--列名--</option>
                 {{each items as value i}}
                 <option value="{{value}}">{{value}}</option>
@@ -725,7 +725,12 @@
     {{/if}}
     {{/each}}
 </script>
-
+<script type="text/html" id="resourceSameSel">
+    <option value="">--列名--</option>
+    {{each items as value i}}
+    <option value="{{value}}">{{value}}</option>
+    {{/each}}
+</script>
 <script type="text/html" id="resourceTmpTableHead">
     {{each tableInfos as value i}}
     <th style="background-color: #64aed9;color: #FFFFFF;">{{value.columnName}}</th>
@@ -1090,12 +1095,41 @@
             // this 全选的复选框
             var userids=this.checked;
             //获取name=box的复选框 遍历输出复选框
-            $("input[name=box]").each(function(){
-                this.checked=userids;
-            });
+            if(userids){
+                selectList.items=[]
+                $("input[name=box]").each(function(){
+                    this.checked=userids;
+                    selectList.items.push($(this).val())
+                });
+                $("[name=sameSel]").each(function () {
+                    $(this).empty()
+                    var html = template("resourceSameSel",selectList)
+                    $(this).append(html)
+                })
+            }else {
+                selectList.items=[]
+                $("input[name=box]").each(function(){
+                    this.checked=userids;
+                });
+                $("[name=sameSel]").each(function () {
+                    $(this).empty()
+                    var html = template("resourceSameSel",selectList)
+                    $(this).append(html)
+                })
+            }
+
         })
         //给name=box的复选框绑定单击事件
         $("#selectTab").delegate("[name=box]","click",function () {
+            selectList.items=[]
+            $("input[name=box]:checked").each(function () {
+                selectList.items.push($(this).val())
+            })
+            $("[name=sameSel]").each(function () {
+                $(this).empty()
+                var html = template("resourceSameSel",selectList)
+                $(this).append(html)
+            })
             var length=$("input[name=box]:checked").length;
             //未选中的长度
             var len=$("input[name=box]").length;
