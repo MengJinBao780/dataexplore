@@ -75,6 +75,9 @@
             border-radius: 0;
 
         }
+        table th{
+            text-align: center;
+        }
 
     </style>
 </head>
@@ -172,7 +175,7 @@
                                         显示列：
                                     </div>
                                     <div style="float: left;width: 10%;line-height: 35px">
-                                        <input type="checkbox" id="selectAll">全选
+                                        <input type="checkbox" id="selectAll" checked="checked">全选
                                     </div>
                                     <div style="float: left;width: 74%;line-height: 35px;word-break: break-all" id="selectTab">
                                         <%--<div class="cus_che">
@@ -722,7 +725,7 @@
 <script type="text/html" id="resourceTmp1">
     {{each tableInfos as value i}}
     <div class="cus_che">
-        <input type="checkbox"  name="box" value="{{value.columnName}}">
+        <input type="checkbox"  name="box" value="{{value.columnName}}" checked="checked">
         <span>{{value.columnName}}</span>
     </div>
     {{/each}}
@@ -730,17 +733,32 @@
 <script type="text/html" id="resourceTmp4">
     {{each list as value i}}
     {{if i ==0}}
-    <div class="tab-pane cus_bor active" id="{{value}}" style="min-height: 400px">
-        {{value}}
+    <div class="tab-pane cus_bor active" id="{{value}}" style="margin: 20px 0">
     </div>
     {{else if i !=0}}
-    <div class="tab-pane cus_bor " id="{{value}}" style="min-height: 400px">
-        {{value}}
+    <div class="tab-pane cus_bor " id="{{value}}" style="margin: 20px 0">
     </div>
     {{/if}}
     {{/each}}
 </script>
 
+<script type="text/html" id="resourceTmpTableHead">
+    {{each tableInfos as value i}}
+    <th style="background-color: #64aed9;color: #FFFFFF;">{{value.columnName}}</th>
+    {{/each}}
+    <th style="background-color: #64aed9;color: #FFFFFF;">操作</th>
+</script>
+<%--<script type="text/html" id="resourceTmpTableBody">
+    {{each datas as value i}}
+        <tr>
+            {{each tableInfos as info i}}
+            <th >{{value.({{info.columnName}})}}</th>
+            {{/each}}
+            <th>详情</th>
+        </tr>
+
+    {{/each}}
+</script>--%>
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
@@ -1125,7 +1143,7 @@
             type:"GET",
             success:function (data) {
                var List = JSON.parse(data)
-                 tableName = List.list[0]
+                tableName = List.list[0]
 
                 var navTabStr ="";
                 for(var i=0;i<List.list.length;i++){
@@ -1138,13 +1156,12 @@
                 $(".nav-tabs").append(navTabStr);
                 var html2 = template("resourceTmp4", List);
                 $(".tab-content").append(html2);
-                console.log(tableName.indexOf(selectList.isTrue))
                 if( selectList.isTrue.indexOf(tableName) == -1){
                     var tabStr = ""
-                    tabStr+="<table class='table table-bordered data-table'><thead><tr class="+tableName+">"+
+                    tabStr+="<table class='table table-bordered data-table table-hover'><thead><tr class="+tableName+">"+
                         "</tr></thead><tbody kid="+tableName +"></tbody></table>"+
-                        "            <div class='row margin-top-20 '><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
-                        "</div><div class="+tableName+" style='float: right; padding-right: 15px;'>"+tableName+"</div></div>"
+                        "            <div class='row'><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
+                        "</div><div class="+tableName+" style='float: right; padding-right: 15px;'></div></div>"
                     $("#"+tableName).append(tabStr)
                     selectList.isTrue.push(tableName)
                 }
@@ -1169,19 +1186,9 @@
                         }
                         $("#initSelect").append(initSelectStr)
 
-                        /*$.ajax({
-                            url:"",
-                            type:"GET",
-                            data:{
-                                subjectCode:"student",
-                                tableName:tableName
-                            },
-                            success:function (data) {
-                                $("#"+tableName).
-                            }
-                        })*/
                     }
                 })
+                tableConfiguration2(1)
 
             }
         })
@@ -1191,19 +1198,14 @@
             tableName = $(this).text()
             if( selectList.isTrue.indexOf(tableName) == -1){
                 var tabStr = ""
-                tabStr+="<table class='table table-bordered data-table'><thead><tr class="+tableName+">"+
+                tabStr+="<table class='table table-bordered data-table table-hover'><thead><tr class="+tableName+">"+
                     "</tr></thead><tbody kid="+tableName +"></tbody></table>"+
-                    "            <div class='row margin-top-20 '><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
-                    "</div><div class="+tableName+" style='float: right; padding-right: 15px;'>"+tableName+"</div></div>"
+                    "            <div class='row'><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
+                    "</div><div class="+tableName+" style='float: right; padding-right: 15px;'></div></div>"
                 $("#"+tableName).append(tabStr)
                 selectList.isTrue.push(tableName)
             }
-            /*var tabStr = ""
-            tabStr+="<table class='table table-bordered data-table'><thead><tr class="+tableName+">"+
-                "</tr></thead><tbody kid="+tableName +"></tbody></table>"+
-                "            <div class='row margin-top-20 '><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
-                "</div><div class="+tableName+" style='float: right; padding-right: 15px;'>"+tableName+"</div></div>"
-            $("#"+tableName).append(tabStr)*/
+
             $.ajax({
                 url:"${ctx}/sdo/getTableFieldComs",
                 type:"POST",
@@ -1231,40 +1233,58 @@
                     
                 }
             })
+            tableConfiguration2(1)
         })
 
         function tableConfiguration2(num) {
             $.ajax({
-                url: "${ctx}/resource/getPageData",
+                url: "${ctx}/sdo/getTableFieldComs",
                 type: "GET",
                 data: {
                     pageNo: num,
-                    pageSize: 10,
+                    subjectCode: "student",
                     tableName:tableName
                 },
                 success: function (data) {
-                    $("."+tableName).html("");
                     var DataList = JSON.parse(data);
                     console.log(DataList)
-                    var tabCon = template("resourceTmp1", DataList);
-                    $("#bd-data").append(tabCon);
+                    $("."+tableName+":eq(0)").empty()
+                    $("[kid="+tableName+"]").empty()
+                    var tabHead = template("resourceTmpTableHead", DataList);
+                    $("."+tableName+":eq(0)").append(tabHead)
+                    var tHeadList = DataList.tableInfos;
+                    var tBodyList = DataList.datas
+                    var tbodyStr ="";
+                    for(var i=0;i<tBodyList.length;i++){
+                        tbodyStr+="<tr>"
+                        for(var j=0;j<tHeadList.length;j++){
+                            if(tHeadList[j].dataType === "datetime"){
+                                tbodyStr+="<th>"+convertMilsToDateTimeString(tBodyList[i][tHeadList[j].columnName]) +"</th>"
+                            }else {
+                                tbodyStr+="<th>"+tBodyList[i][tHeadList[j].columnName] +"</th>"
+                            }
 
-                    if (DataList.resourceList.length == 0) {
+                        }
+                        tbodyStr+="<th>详情</th></tr>"
+                    }
+                    $("[kid="+tableName+"]").append(tbodyStr);
+                    /*if (DataList.resourceList.length == 0) {
                         $(".table-message").html("暂时没有数据");
                         $(".page-message").html("");
                         $(".page-list").html("");
                         return
                     }
-                    $(".table-message").html("");
+                    $(".table-message").html("");*/
                     /*
                     * 创建table
                     * */
-                    if ($(".page-list .bootpag").length != 0) {
-                        $(".page-list").off();
-                        $('.page-list').empty();
+                    $("."+tableName+":eq(0) .bootpag")
+                    if ($("."+tableName+":eq(0) .bootpag").length != 0) {
+                        $("."+tableName+":eq(2)").off();
+                        $("."+tableName+":eq(2)").empty();
                     }
-                    $(".page-message").html("当前第<span style='color:blue'>" + DataList.currentPage + "</span>页,共<span style='color:blue'>" + DataList.totalPages + "</span>页,共<span style='color:blue'>" + DataList.totalCount + "</span>条数据");
-                    $('.page-list').bootpag({
+                    $("."+tableName+":eq(1)").html("当前第<span style='color:blue'>" + DataList.currentPage + "</span>页,共<span style='color:blue'>" + DataList.totalPages + "</span>页,共<span style='color:blue'>" + DataList.totalCount + "</span>条数据");
+                    $("."+tableName+":eq(2)").bootpag({
                         total: DataList.totalPages,
                         page: DataList.currentPage,
                         maxVisible: 5,
@@ -1280,7 +1300,7 @@
                         lastClass: 'last',
                         firstClass: 'first'
                     }).on('page', function (event, num) {
-                        tableConfiguration2(num,publicType,resourceState,resourceName);
+                        tableConfiguration2(num);
                     });
                 },
                 error: function () {
