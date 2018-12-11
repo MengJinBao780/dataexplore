@@ -1171,9 +1171,10 @@
                     type:"POST",
                     data:{
                         subjectCode:"student",
-                        tableName:tableName
+                        tableName:tableName,
                     },
                     success:function (data) {
+                        console.log("aaaaaaaaaaaaaa"+data)
                         var tableInfosList = JSON.parse(data)
                         for(var i=0;i<tableInfosList.tableInfos.length;i++){
                             selectList.items.push(tableInfosList.tableInfos[i].columnName)
@@ -1243,9 +1244,11 @@
                 data: {
                     pageNo: num,
                     subjectCode: "student",
-                    tableName:tableName
+                    tableName:tableName,
+                    columnName:""
                 },
                 success: function (data) {
+                    console.log("bbbbbb"+data)
                     var DataList = JSON.parse(data);
                     console.log(DataList)
                     $("."+tableName+":eq(0)").empty()
