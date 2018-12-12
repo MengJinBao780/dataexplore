@@ -1217,12 +1217,25 @@
                 var list=[]
                 var num = $(".cus_all").length;
                 if(num == 3){
-                    list.push([$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),$(".cus_all:eq(2)").val()])
+                    if($(".cus_all:eq(1)").val() ==="like"){
+                        list.push(["&",$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),"%"+$(".cus_all:eq(2)").val()+"%"])
+                    }else {
+                        list.push(["&",$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),$(".cus_all:eq(2)").val()])
+                    }
+
                 }
                 if(num >3){
-                    list.push(["&",$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),$(".cus_all:eq(2)").val()])
+                    if($(".cus_all:eq(1)").val() ==="like"){
+                        list.push(["&",$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),"%"+$(".cus_all:eq(2)").val()+"%"])
+                    }else {
+                        list.push(["&",$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),$(".cus_all:eq(2)").val()])
+                    }
                     for(var i=3;i<num;i+=4){
-                        list.push([$(".cus_all:eq("+i+")").val(),$(".cus_all:eq("+(i+1)+")").val(),$(".cus_all:eq("+(i+2)+")").val(),$(".cus_all:eq("+(i+3)+")").val()])
+                        if($(".cus_all:eq("+(i+2)+")").val() ==="like"){
+                            list.push([$(".cus_all:eq("+i+")").val(),$(".cus_all:eq("+(i+1)+")").val(),$(".cus_all:eq("+(i+2)+")").val(),"%"+$(".cus_all:eq("+(i+3)+")").val()+"%"])
+                        }else {
+                            list.push([$(".cus_all:eq("+i+")").val(),$(".cus_all:eq("+(i+1)+")").val(),$(".cus_all:eq("+(i+2)+")").val(),$(".cus_all:eq("+(i+3)+")").val()])
+                        }
                     }
                 }
                 var jsonStr =JSON.stringify(list)
