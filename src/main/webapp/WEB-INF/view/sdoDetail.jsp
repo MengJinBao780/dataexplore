@@ -24,7 +24,7 @@
         #tabStyTwo{
             transition: all 0.5s;
         }
-       .cus_input{
+       .cus_input ,.cus_input2{
            padding: 6px 12px;
            font-size: 14px;
            height: 35px;
@@ -190,21 +190,21 @@
                                     <div style="float: left;width: 65%;">
                                         <div style="overflow: hidden">
                                             <div style="float: left;width: 60%;text-align: right">
-                                                <select name="sameSel" style="width: 100px" class="cus_input" id="initSelect">
+                                                <select name="sameSel" style="width: 100px" class="cus_input cus_all" id="initSelect">
                                                     <%--<option value="">请选择列</option>
                                                     <option value="">bbbbb</option>--%>
                                                 </select>
-                                                <select name="" style="width: 100px" class="cus_input">
+                                                <select  style="width: 100px" class="cus_input cus_all">
                                                     <option value="">--条件--</option>
-                                                    <option value="">包含(like)</option>
-                                                    <option value="">小于等于</option>
-                                                    <option value="">大于等于</option>
-                                                    <option value="">等于</option>
-                                                    <option value="">在--中</option>
+                                                    <option value="like">包含(like)</option>
+                                                    <option value="<=">小于等于</option>
+                                                    <option value=">=">大于等于</option>
+                                                    <option value="==">等于</option>
+                                                    <option value="between">在--中</option>
                                                 </select>
                                             </div>
                                             <div style="float: left;width:40%;text-align: center">
-                                                <input class="cus_input" type="text">
+                                                <input class="cus_input cus_all" type="text">
                                             </div>
                                         </div>
                                         <div id="dataset-list">
@@ -700,29 +700,29 @@
 <script type="text/html" id="resourceTmp2">
     <div style="overflow: hidden">
         <div style="float: left;width: 60%;text-align: right">
-            <select name="" style="width:100px" class="cus_input" >
+            <select  style="width:100px" class="cus_input2 cus_all" >
                 <option value="&">并且</option>
                 <option value="||">或者</option>
             </select>
 
-            <select name="sameSel" style="width: 100px" class="cus_input" >
+            <select name="sameSel" style="width: 100px" class="cus_input cus_all" >
                 <option value="">--列名--</option>
                 {{each items as value i}}
-                <option value="{{value}}">{{value}}</option>
+                <option value="{{value}}" name="{{value}}">{{value}}</option>
                 {{/each}}
             </select>
 
-            <select name="" style="width: 100px" class="cus_input" >
+            <select name="" style="width: 100px" class="cus_input cus_all" >
                 <option value="">--条件--</option>
-                <option value="">包含(like)</option>
-                <option value="">小于等于</option>
-                <option value="">大于等于</option>
-                <option value="">等于</option>
-                <option value="">在--中</option>
+                <option value="like">包含(like)</option>
+                <option value="<=">小于等于</option>
+                <option value=">=">大于等于</option>
+                <option value="==">等于</option>
+                <option value="between">在--中</option>
             </select>
         </div>
         <div style="float: left;width:40%;text-align: center">
-            <input class="cus_input" type="text">
+            <input class="cus_input cus_all" type="text">
         </div>
     </div>
 
@@ -790,6 +790,7 @@
         };
         var tableName="";
         var indexPage=1;
+        var searchCondition =""
         $(".collapse").on('shown.bs.collapse', function () {
             $("#tabStyOne").text("收缩")
             $("#tabStyTwo").css("transform","rotate(0deg)")
@@ -1123,16 +1124,18 @@
             var userids=this.checked;
             //获取name=box的复选框 遍历输出复选框
             if(userids){
-                selectList.items=[]
                 $("input[name=box]").each(function(){
-                    this.checked=userids;
-                    selectList.items.push($(this).val())
+                    if(!this.checked){
+                        this.checked=userids;
+                        var checkName =$(this).val()
+                        $("[name=sameSel]").each(function () {
+                            var html = "<option value="+checkName+">"+ checkName+"</option>"
+                            $(this).append(html)
+                        })
+                    }
+                    /*selectList.items.push($(this).val())*/
                 });
-                $("[name=sameSel]").each(function () {
-                    $(this).empty()
-                    var html = template("resourceSameSel",selectList)
-                    $(this).append(html)
-                })
+
             }else {
                 selectList.items=[]
                 $("input[name=box]").each(function(){
@@ -1148,7 +1151,7 @@
         })
         //给name=box的复选框绑定单击事件
         $("#selectTab").delegate("[name=box]","click",function () {
-            selectList.items=[]
+            /*selectList.items=[]
             $("input[name=box]:checked").each(function () {
                 selectList.items.push($(this).val())
             })
@@ -1156,7 +1159,19 @@
                 $(this).empty()
                 var html = template("resourceSameSel",selectList)
                 $(this).append(html)
-            })
+            })*/
+            if(this.checked){
+                var checkName =$(this).val()
+                $("[name=sameSel]").each(function () {
+                    var html = "<option value="+checkName+">"+ checkName+"</option>"
+                    $(this).append(html)
+                })
+            }else{
+                var checkName =$(this).val()
+                $("[name="+checkName+"]").each(function () {
+                    $(this).remove()
+                })
+            }
             var length=$("input[name=box]:checked").length;
             //未选中的长度
             var len=$("input[name=box]").length;
@@ -1168,13 +1183,58 @@
         })
         //检索
         $("#retrieve").click(function () {
+
             var length=$("input[name=box]:checked").length;
             if(length == 0){
                 toastr["error"]("提示！", "请至少选择一个显示列");
                 return
             }
+
+
+            var totalNum =$(".cus_input").length
+            var nowNum = 0
+            $(".cus_input").each(function () {
+                if($(this).val() ==""){
+                    nowNum+=1
+                }
+            })
+            if(totalNum ==nowNum ){
+                searchCondition=""
+            }else {
+                searchCondition=""
+                var flag = false
+                //判断是否添加新的检索条件
+                $(".cus_input").each(function () {
+                    if($(this).val() ==""){
+                        flag=true
+                        return
+                    }
+                })
+                if(flag){
+                    toastr["error"]("提示！", "请填写完整再检索");
+                    return
+                }
+                var list=[]
+                var num = $(".cus_all").length;
+                if(num == 3){
+                    list.push([$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),$(".cus_all:eq(2)").val()])
+                }
+                if(num >3){
+                    list.push([$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),$(".cus_all:eq(2)").val()])
+                    for(var i=3;i<num;i+=4){
+                        list.push([$(".cus_all:eq("+i+")").val(),$(".cus_all:eq("+(i+1)+")").val(),$(".cus_all:eq("+(i+2)+")").val(),$(".cus_all:eq("+(i+3)+")").val()])
+                    }
+                }
+                var jsonStr =JSON.stringify(list)
+                console.log(jsonStr)
+                searchCondition = jsonStr
+            }
+
+
+
+
             var columnNameStr = selectList.items.toString()
-            tableConfiguration2(1,columnNameStr)
+            tableConfiguration2(1,columnNameStr,searchCondition)
         })
         //详情
         $(".tab-content").delegate(".seeDetails","click",function () {
@@ -1209,6 +1269,18 @@
             })
         })
         function addSelectConditions() {
+            var flag = false
+            //判断是否添加新的检索条件
+            $(".cus_input").each(function () {
+                if($(this).val() ==""){
+                    flag=true
+                    return
+                }
+            })
+            if(flag){
+                toastr["error"]("提示！", "请填写完整再添加检索条件");
+                return
+            }
             var html = template("resourceTmp2", selectList);
             $("#dataset-list").append(html);
         }
@@ -1258,13 +1330,13 @@
                         $("#selectTab").append(html)
                         var initSelectStr="<option value=''>--列名--</option>"
                         for(var i=0;i<selectList.items.length;i++){
-                            initSelectStr+="<option value="+selectList.items[i]+">"+selectList.items[i]+"</option>"
+                            initSelectStr+="<option value="+selectList.items[i]+" name="+selectList.items[i] +">"+selectList.items[i]+"</option>"
                         }
                         $("#initSelect").append(initSelectStr)
 
                     }
                 })
-                tableConfiguration2(1,"")
+                tableConfiguration2(1,"","")
 
             }
         })
@@ -1311,10 +1383,10 @@
                     
                 }
             })
-            tableConfiguration2(1,"")
+            tableConfiguration2(1,"","")
         })
 
-        function tableConfiguration2(num,columnStr) {
+        function tableConfiguration2(num,columnStr,searchStr) {
             indexPage=num
             $.ajax({
                 url: "${ctx}/sdo/getTableFieldComs",
@@ -1380,7 +1452,7 @@
                         lastClass: 'last',
                         firstClass: 'first'
                     }).on('page', function (event, num) {
-                        tableConfiguration2(num);
+                        tableConfiguration2(num,columnStr,searchStr);
                     });
                 },
                 error: function () {
