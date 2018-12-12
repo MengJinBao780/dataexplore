@@ -1395,7 +1395,8 @@
                     pageNo: num,
                     subjectCode: "student",
                     tableName:tableName,
-                    columnName:columnStr
+                    columnName:columnStr,
+                    searchConditon:searchStr
                 },
                 success: function (data) {
                     var DataList = JSON.parse(data);
