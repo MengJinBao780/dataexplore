@@ -130,7 +130,7 @@ public class TableFieldComsService {
         return Joiner.on(URISPLIT).skipNulls().join(host, port, databaseName, tableName);
     }
 
-    public List<Map<String,Object>> getDataBySql(String sql, String SubjectCode, int start, int limit) {
+    public List<Map<String,Object>> getDataBySql(List searchCondition, String sql, String SubjectCode, int start, int limit) {
         Subject subject = checkUserDao.getSubjectByCode(SubjectCode);
         DataSrc datasrc = new DataSrc();
         datasrc.setDatabaseName(subject.getDbName());
@@ -142,7 +142,17 @@ public class TableFieldComsService {
         IDataSource dataSource = DataSourceFactory.getDataSource(datasrc.getDatabaseType());
         Connection connection = dataSource.getConnection(datasrc.getHost(), datasrc.getPort(),
                 datasrc.getUserName(), datasrc.getPassword(), datasrc.getDatabaseName());
-        PreparedStatement paginationSql = dataSource.getPaginationSql(connection, sql, null, start, limit);
+        List<Object>condition = new ArrayList<>();
+        PreparedStatement paginationSql;
+        if(searchCondition!=null){
+            for (int i = 0; i < searchCondition.size(); i++) {
+                List<String> list1 = (List) searchCondition.get(i);
+                condition.add(list1.get(3));
+            }
+            paginationSql = dataSource.getPaginationSql(connection, sql, condition, start, limit);
+        }else{
+            paginationSql = dataSource.getPaginationSql(connection, sql, null, start, limit);
+        }
         List<Map<String,Object>> list = new ArrayList<>();
         try {
             ResultSet resultSet = paginationSql.executeQuery();
@@ -170,7 +180,7 @@ public class TableFieldComsService {
         return list;
     }
 
-    public List<Map<String,Object>> getDataByTable(String[]column,String tableName, String SubjectCode, int start, int limit) {
+    public List<Map<String,Object>> getDataByTable(List list,String[]column,String tableName, String SubjectCode, int start, int limit) {
         String sql = " ";
         if(column==null){
             sql = "select * from ";
@@ -190,6 +200,17 @@ public class TableFieldComsService {
             }
             sql = sql + " from ";
         }
-        return getDataBySql(sql + tableName, SubjectCode, start, limit);
+        sql = sql + tableName + " where 1=1 ";
+        if(list!=null){
+            for (int i = 0; i < list.size(); i++) {
+                List<String> list1 = (List) list.get(i);
+                if("&".equals(list1.get(0))){
+                    sql = sql + "and "+list1.get(1)+" "+list1.get(2)+" ? ";
+                }
+            }
+            return getDataBySql(list, sql , SubjectCode, start, limit);
+        }else{
+            return getDataBySql(null, sql , SubjectCode, start, limit);
+        }
     }
 }

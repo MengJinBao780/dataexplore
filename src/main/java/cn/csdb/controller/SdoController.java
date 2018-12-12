@@ -962,8 +962,15 @@ public class SdoController {
     public JSONObject getFieldComsByTableName(String subjectCode,
                                               String tableName,
                                               String columnName,
+                                              String searchConditon,
                                               @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
                                               @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        List search = new ArrayList();
+        if(searchConditon!="") {
+            search = JSON.parseObject(searchConditon, List.class);
+        }else{
+            search = null;
+        }
         JSONObject jsonObject = new JSONObject();
         Map<String, List<TableInfo>> fieldComsByTableName = tableFieldComsService.getDefaultFieldComsByTableName(subjectCode, tableName);
         if (fieldComsByTableName != null) {
@@ -985,10 +992,10 @@ public class SdoController {
         }
         List<Map<String,Object>> datas = new ArrayList<>();
         if(columnName==""||columnName==null){
-            datas = tableFieldComsService.getDataByTable(null,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+            datas = tableFieldComsService.getDataByTable(search,null,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
         }else{
             String[] s = columnName.split(",");
-            datas = tableFieldComsService.getDataByTable(s,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+            datas = tableFieldComsService.getDataByTable(search,s,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
         }
         jsonObject.put("datas", datas);
         jsonObject.put("totalCount",datas.size());
@@ -1006,7 +1013,7 @@ public class SdoController {
             @RequestParam String subjectCode,
             @RequestParam(value = "pageNo",defaultValue = "1") int pageNo) {
         JSONObject jsonObject = new JSONObject();
-        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(null,tableName ,subjectCode, 0 , pageNo);
+        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(null,null,tableName ,subjectCode, 0 , pageNo);
         Map<String,Object>rowData = datas.get(datas.size()-1);
         jsonObject.put("rowData", rowData);
         return jsonObject;
