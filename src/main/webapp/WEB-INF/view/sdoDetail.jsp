@@ -1220,7 +1220,7 @@
                     list.push([$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),$(".cus_all:eq(2)").val()])
                 }
                 if(num >3){
-                    list.push([$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),$(".cus_all:eq(2)").val()])
+                    list.push(["&",$(".cus_all:eq(0)").val(),$(".cus_all:eq(1)").val(),$(".cus_all:eq(2)").val()])
                     for(var i=3;i<num;i+=4){
                         list.push([$(".cus_all:eq("+i+")").val(),$(".cus_all:eq("+(i+1)+")").val(),$(".cus_all:eq("+(i+2)+")").val(),$(".cus_all:eq("+(i+3)+")").val()])
                     }
