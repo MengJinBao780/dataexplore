@@ -207,6 +207,9 @@ public class TableFieldComsService {
                 if("&".equals(list1.get(0))){
                     sql = sql + "and "+list1.get(1)+" "+list1.get(2)+" ? ";
                 }
+                if("||".equals(list1.get(0))){
+                    sql = sql + "or "+list1.get(1)+" "+list1.get(2)+" ? ";
+                }
             }
             return getDataBySql(list, sql , SubjectCode, start, limit);
         }else{
