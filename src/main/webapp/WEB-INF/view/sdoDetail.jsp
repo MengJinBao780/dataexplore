@@ -946,7 +946,7 @@
                     $("#related-peo-pTel").append(data.tel + "<br>");
                     $("#related-peo-pEmail").append(data.email + "<br>");
 
-                    if (constTataType != "XLSX" && constTataType != "ARC/GRID") {
+                    if (constTataType != "XLSX" && constTataType != "ARC/GRID"&&constTataType !="file") {
                         $("#table-form").show();
 
 

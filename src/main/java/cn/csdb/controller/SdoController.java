@@ -163,9 +163,7 @@ public class SdoController {
         if(map.isEmpty()){
             return new HashMap<>();
         }
-/*
-        map.put("condition",fileTemplateService.findSearchField(map.get("fileType").toString()));
-*/
+        map.put("condition",fileTemplateService.findSearchField("XLSX"));
         String loginId = String.valueOf(request.getSession().getAttribute("loginId"));
         if (loginId.equals("") || loginId.equals("null")){
             map.put("isLoad","");
@@ -438,8 +436,8 @@ public class SdoController {
                                              @RequestParam(name = "fileType", defaultValue = "xlsx")String fileType,
                                              @RequestParam(name = "pageNum", defaultValue = "1")Integer pageNum,
                                              @RequestParam(name ="sdoId")String sdoId,
-                                             @RequestParam(name="subjectCode")String subjectCode){
-        List<Map<String,String>> list1 = fileTemplateService.findShowField(fileType);
+                                             @RequestParam(name="subjectCode",required = false,defaultValue = "sdc")String subjectCode){
+        List<Map<String,String>> list1 = fileTemplateService.findShowField("XLSX");
         Map<String,String> map = new HashMap<>();
         map.put("fieldName","updateTime");
         map.put("fieldTitle","日期");
