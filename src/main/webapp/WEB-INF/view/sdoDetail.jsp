@@ -1128,9 +1128,10 @@
                             var val = list.topTitle[j].fieldName;
                             bodyStr += "<td>" + list.data[i][val] + "</td>"
                         }
+                        var fileStr = list.data[i].filePathString.replace(/%_%/g, "/");
                         bodyStr += "<td> <button  class='operation-btn tab-preview' > 预览 </button>" +
                             " <button  class='operation-btn tab-metadata' data-toggle='modal' data-target='#myModalTwo'name='tab-metadata' > 元数据 </button>" +
-                            "<button  class='operation-btn tab-download'> 下载 </button> " +
+                            "<button  class='operation-btn tab-download' name="+ fileStr+" > 下载 </button> " +
 //                            "<button  class='operation-btn tab-copyid' > 复制id </button>" +
                             "<button type='button' class='operation-btn tab-copyid' data-toggle='popover' title='文件id' data-content='"+list.data[i].id+"'>文件id</button>" +
                             "</td></tr>"
@@ -1595,8 +1596,9 @@
                 toastr["error"]("请先登录！");
                 return;
             }
-            var id = $(this).parent().parent().attr("onlyID");
-            window.location.href = "${ctx}/sdo/downloadOneFile?id=" + id;
+            var filePathString = $(this).attr("name");
+            console.log(filePathString);
+            window.location.href = "${ctx}/sdo/downloadOneFile?filePathString=" + filePathString;
         })
         /*全部下载*/
         $("#download-all").on("click", function () {
