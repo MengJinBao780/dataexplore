@@ -776,10 +776,8 @@
     <script>
         var sdoId = "${id}";
         var tagsNum = 0;
-        var HDFData = {};
         var EXCELData = {};
         var Exp = /^(-|\+)?[0-9]+.?[0-9]*$/;
-        var hdfUrl = "${ctx}/sdo/getFileByHDF";
         $("#first").removeClass("active");
         $("#second").addClass("active");
         $("#third").removeClass("active");
@@ -809,6 +807,7 @@
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
+                    console.log(data)
                     var constTataType = data.fileType;
                     $("#header-creator").html(data.creator[0]);
                     /*$("#header-creator").attr("title", data.creator[0]);*/
@@ -947,9 +946,62 @@
                     $("#related-peo-pEmail").append(data.email + "<br>");
 
                     if (constTataType != "XLSX" && constTataType != "ARC/GRID") {
+                        $.ajax({
+                            url:"${ctx}/resource/relationalDatabaseTableList",
+                            type:"GET",
+                            success:function (data) {
+                                var List = JSON.parse(data)
+                                tableName = List.list[0]
+
+                                var navTabStr ="";
+                                for(var i=0;i<List.list.length;i++){
+                                    if(i==0){
+                                        navTabStr+="<li class='active'><a href=#"+List.list[i]+" data-toggle='tab'>"+List.list[i] +"</a></li>"
+                                    }else {
+                                        navTabStr+="<li><a href=#"+List.list[i]+" data-toggle='tab'>"+List.list[i] +"</a></li>"
+                                    }
+                                }
+                                $(".nav-tabs").append(navTabStr);
+                                var html2 = template("resourceTmp4", List);
+                                $(".tab-content").append(html2);
+                                if( selectList.isTrue.indexOf(tableName) == -1){
+                                    var tabStr = ""
+                                    tabStr+="<table class='table table-bordered data-table table-hover'><thead><tr class="+tableName+">"+
+                                        "</tr></thead><tbody kid="+tableName +"></tbody></table>"+
+                                        "            <div class='row'><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
+                                        "</div><div class="+tableName+" style='float: right; padding-right: 15px;'></div></div>"
+                                    $("#"+tableName).append(tabStr)
+                                    selectList.isTrue.push(tableName)
+                                }
+
+                                $.ajax({
+                                    url:"${ctx}/sdo/getTableFieldComs",
+                                    type:"POST",
+                                    data:{
+                                        subjectCode:"student",
+                                        tableName:tableName,
+                                    },
+                                    success:function (data) {
+                                        var tableInfosList = JSON.parse(data)
+                                        for(var i=0;i<tableInfosList.tableInfos.length;i++){
+                                            selectList.items.push(tableInfosList.tableInfos[i].columnName)
+                                        }
+                                        $("#selectAllTab").append("<input type='checkbox' id='selectAll' checked='checked'>全选")
+                                        var html = template("resourceTmp1", tableInfosList);
+                                        $("#selectTab").append(html)
+                                        var initSelectStr="<option value=''>--列名--</option>"
+                                        for(var i=0;i<selectList.items.length;i++){
+                                            initSelectStr+="<option value="+selectList.items[i]+" name="+selectList.items[i] +">"+selectList.items[i]+"</option>"
+                                        }
+                                        $("#initSelect").append(initSelectStr)
+
+                                    }
+                                })
+                                tableConfiguration2(1,"","")
+
+                            }
+                        })
                         $("#table-form").show();
-
-
                     }
                     else {
                         var ExStr = "";
@@ -1298,61 +1350,7 @@
             $("#dataset-list").append(html);
         }
 
-        $.ajax({
-            url:"${ctx}/resource/relationalDatabaseTableList",
-            type:"GET",
-            success:function (data) {
-               var List = JSON.parse(data)
-                tableName = List.list[0]
 
-                var navTabStr ="";
-                for(var i=0;i<List.list.length;i++){
-                    if(i==0){
-                        navTabStr+="<li class='active'><a href=#"+List.list[i]+" data-toggle='tab'>"+List.list[i] +"</a></li>"
-                    }else {
-                        navTabStr+="<li><a href=#"+List.list[i]+" data-toggle='tab'>"+List.list[i] +"</a></li>"
-                    }
-                }
-                $(".nav-tabs").append(navTabStr);
-                var html2 = template("resourceTmp4", List);
-                $(".tab-content").append(html2);
-                if( selectList.isTrue.indexOf(tableName) == -1){
-                    var tabStr = ""
-                    tabStr+="<table class='table table-bordered data-table table-hover'><thead><tr class="+tableName+">"+
-                        "</tr></thead><tbody kid="+tableName +"></tbody></table>"+
-                        "            <div class='row'><div class="+tableName+" style='float: left;padding-left: 20px; line-height: 56px'>"+
-                        "</div><div class="+tableName+" style='float: right; padding-right: 15px;'></div></div>"
-                    $("#"+tableName).append(tabStr)
-                    selectList.isTrue.push(tableName)
-                }
-
-                $.ajax({
-                    url:"${ctx}/sdo/getTableFieldComs",
-                    type:"POST",
-                    data:{
-                        subjectCode:"student",
-                        tableName:tableName,
-                    },
-                    success:function (data) {
-                        var tableInfosList = JSON.parse(data)
-                        for(var i=0;i<tableInfosList.tableInfos.length;i++){
-                            selectList.items.push(tableInfosList.tableInfos[i].columnName)
-                        }
-                        $("#selectAllTab").append("<input type='checkbox' id='selectAll' checked='checked'>全选")
-                        var html = template("resourceTmp1", tableInfosList);
-                        $("#selectTab").append(html)
-                        var initSelectStr="<option value=''>--列名--</option>"
-                        for(var i=0;i<selectList.items.length;i++){
-                            initSelectStr+="<option value="+selectList.items[i]+" name="+selectList.items[i] +">"+selectList.items[i]+"</option>"
-                        }
-                        $("#initSelect").append(initSelectStr)
-
-                    }
-                })
-                tableConfiguration2(1,"","")
-
-            }
-        })
         $(".nav-tabs").delegate("a","click",function () {
             /*e.preventDefault()*/
 
