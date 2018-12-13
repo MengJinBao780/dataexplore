@@ -32,6 +32,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -449,15 +450,18 @@ public class SdoController {
             Map<String,String> map1 = new HashMap<>();
             String s = filePathString.substring(filePathString.lastIndexOf("%")+1);
             map1.put("fileName",s);
+            map1.put("filePathString",filePathString);
             map1.put("size","0.1M");
-            map1.put("recordNum","0");
+            map1.put("recordNum","1");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            map1.put("updateTime",sdf.format(res.getCreateTime()));
             list2.add(map1);
         }
 
 /*
         List<Map<String,String>> list2 = fileInfoService.getFileByCondition(list1,pid,fileName,fileType,pageNum,sdoId);
 */
-        long totalCount =fileInfoService.getTotalNumByCondition();
+        long totalCount =list2.size();
         long pageSum = totalCount%10==0?totalCount/10:totalCount/10+1;
         Map<String,Object> m = new HashMap<>();
         m.put("topTitle",list1);
