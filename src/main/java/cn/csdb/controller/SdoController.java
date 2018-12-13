@@ -163,9 +163,7 @@ public class SdoController {
         if(map.isEmpty()){
             return new HashMap<>();
         }
-/*
-        map.put("condition",fileTemplateService.findSearchField(map.get("fileType").toString()));
-*/
+        map.put("condition",fileTemplateService.findSearchField("XLSX"));
         String loginId = String.valueOf(request.getSession().getAttribute("loginId"));
         if (loginId.equals("") || loginId.equals("null")){
             map.put("isLoad","");
@@ -438,8 +436,8 @@ public class SdoController {
                                              @RequestParam(name = "fileType", defaultValue = "xlsx")String fileType,
                                              @RequestParam(name = "pageNum", defaultValue = "1")Integer pageNum,
                                              @RequestParam(name ="sdoId")String sdoId,
-                                             @RequestParam(name="subjectCode")String subjectCode){
-        List<Map<String,String>> list1 = fileTemplateService.findShowField(fileType);
+                                             @RequestParam(name="subjectCode",required = false,defaultValue = "sdc")String subjectCode){
+        List<Map<String,String>> list1 = fileTemplateService.findShowField("XLSX");
         Map<String,String> map = new HashMap<>();
         map.put("fieldName","updateTime");
         map.put("fieldTitle","日期");
@@ -962,8 +960,15 @@ public class SdoController {
     public JSONObject getFieldComsByTableName(String subjectCode,
                                               String tableName,
                                               String columnName,
+                                              String searchConditon,
                                               @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
                                               @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        List search = new ArrayList();
+        if(searchConditon!="") {
+            search = JSON.parseObject(searchConditon, List.class);
+        }else{
+            search = null;
+        }
         JSONObject jsonObject = new JSONObject();
         Map<String, List<TableInfo>> fieldComsByTableName = tableFieldComsService.getDefaultFieldComsByTableName(subjectCode, tableName);
         if (fieldComsByTableName != null) {
@@ -985,10 +990,10 @@ public class SdoController {
         }
         List<Map<String,Object>> datas = new ArrayList<>();
         if(columnName==""||columnName==null){
-            datas = tableFieldComsService.getDataByTable(null,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+            datas = tableFieldComsService.getDataByTable(search,null,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
         }else{
             String[] s = columnName.split(",");
-            datas = tableFieldComsService.getDataByTable(s,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
+            datas = tableFieldComsService.getDataByTable(search,s,tableName ,subjectCode, (pageNo-1)*pageSize , pageSize);
         }
         jsonObject.put("datas", datas);
         jsonObject.put("totalCount",datas.size());
@@ -1006,7 +1011,7 @@ public class SdoController {
             @RequestParam String subjectCode,
             @RequestParam(value = "pageNo",defaultValue = "1") int pageNo) {
         JSONObject jsonObject = new JSONObject();
-        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(null,tableName ,subjectCode, 0 , pageNo);
+        List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(null,null,tableName ,subjectCode, 0 , pageNo);
         Map<String,Object>rowData = datas.get(datas.size()-1);
         jsonObject.put("rowData", rowData);
         return jsonObject;

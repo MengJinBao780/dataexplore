@@ -945,6 +945,7 @@
                     $("#related-peo-pTel").append(data.tel + "<br>");
                     $("#related-peo-pEmail").append(data.email + "<br>");
 
+<<<<<<< HEAD
                     if (constTataType != "XLSX" && constTataType != "ARC/GRID") {
                         $.ajax({
                             url:"${ctx}/resource/relationalDatabaseTableList",
@@ -973,6 +974,10 @@
                                     $("#"+tableName).append(tabStr)
                                     selectList.isTrue.push(tableName)
                                 }
+=======
+                    if (constTataType != "XLSX" && constTataType != "ARC/GRID"&&constTataType !="file") {
+                        $("#table-form").show();
+>>>>>>> 77c9959a2471a2ba7c7073e76a66018bdf2e0070
 
                                 $.ajax({
                                     url:"${ctx}/sdo/getTableFieldComs",
