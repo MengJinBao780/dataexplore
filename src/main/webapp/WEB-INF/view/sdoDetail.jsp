@@ -775,6 +775,7 @@
 
     <script>
         var sdoId = "${id}";
+
         var tagsNum = 0;
         var EXCELData = {};
         var Exp = /^(-|\+)?[0-9]+.?[0-9]*$/;
@@ -807,7 +808,6 @@
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
-                    console.log(data)
                     var constTataType = data.fileType;
                     $("#header-creator").html(data.creator[0]);
                     /*$("#header-creator").attr("title", data.creator[0]);*/
@@ -1034,7 +1034,6 @@
                         $("[name='updateExcel']").on("keypress", function (ev) {
                             var event = ev || window.event;
                             if (event.keyCode == 13) {
-                                console.log("aaaa")
                                 updateEXCEL(dataArr);
                                 getMidData(1, EXCELData, constTataType, url);
                             }
@@ -1102,7 +1101,6 @@
             var consData = data;
             consData.fileType = type;
             consData.pageNum = pageNo;
-            console.log(consData)
             $.ajax({
                 url: url,
                 type: "GET",
@@ -1294,7 +1292,6 @@
                     }
                 }
                 var jsonStr =JSON.stringify(list)
-                console.log(jsonStr)
                 searchCondition = jsonStr
             }
             var checkList=[]
@@ -1309,7 +1306,6 @@
         $(".tab-content").delegate(".seeDetails","click",function () {
             var index = $(".seeDetails").index($(this))
             var totalIndex=(indexPage-1)*10+(index+1)
-            console.log(totalIndex)
             $.ajax({
                 url:"${ctx}/sdo/getRelationalDatabaseByTableName",
                 type:"GET",
@@ -1415,7 +1411,6 @@
                 },
                 success: function (data) {
                     var DataList = JSON.parse(data);
-                    console.log(DataList)
                     $("."+tableName+":eq(0)").empty()
                     $("[kid="+tableName+"]").empty()
                     var tabHead = template("resourceTmpTableHead", DataList);
@@ -1600,7 +1595,7 @@
             }
             var filePathString = $(this).attr("name");
             console.log(filePathString);
-            window.location.href = "${ctx}/sdo/downloadOneFile?filePathString=" + filePathString;
+            window.location.href = "${ctx}/sdo/downloadOneFile?filePathString=" + filePathString+"&sdoId="+sdoId;
         })
         /*全部下载*/
         $("#download-all").on("click", function () {
@@ -1618,7 +1613,7 @@
             $eleChecked.each(function () {
                 list.push($(this).parent().parent().attr("onlyID"))
             });
-            var url = "${ctx}/sdo/downloadFiles?listId=" + list.toString();
+            var url = "${ctx}/sdo/downloadFiles?listId=" + list.toString()+"&sdoId="+sdoId;
             window.location.href = url;
         })
 
