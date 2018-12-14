@@ -1122,13 +1122,14 @@
                     headStr += "<th style='width:22%'>操作</th>";
 
                     for (var i = 0; i < list.data.length; i++) {
+                        var fileStr = list.data[i].filePathString.replace(/%_%/g, "/");
                         var downurl = "${ctx}/sdo/downloadOneFile?id=" + list.data[i].id;
-                        bodyStr += "<tr onlyID=" + list.data[i].id + "><td><input type='checkbox' name='items'></td>"
+                        bodyStr += "<tr onlyID=" + fileStr + "><td><input type='checkbox' name='items'></td>"
                         for (var j = 0; j < list.topTitle.length; j++) {
                             var val = list.topTitle[j].fieldName;
                             bodyStr += "<td>" + list.data[i][val] + "</td>"
                         }
-                        var fileStr = list.data[i].filePathString.replace(/%_%/g, "/");
+
                         bodyStr += "<td> <button  class='operation-btn tab-preview' > 预览 </button>" +
                             " <button  class='operation-btn tab-metadata' data-toggle='modal' data-target='#myModalTwo'name='tab-metadata' > 元数据 </button>" +
                             "<button  class='operation-btn tab-download' name="+ fileStr+" > 下载 </button> " +
@@ -1603,10 +1604,10 @@
         })
         /*全部下载*/
         $("#download-all").on("click", function () {
-            if (loginId == "") {
+           /* if (loginId == "") {
                 toastr["error"]("请先登录！");
                 return;
-            }
+            }*/
             var $eleChecked = $("[name='items']:checked")
             var numChecked = $eleChecked.size();
             if (numChecked == 0) {
