@@ -1296,11 +1296,12 @@
                 console.log(jsonStr)
                 searchCondition = jsonStr
             }
+            var checkList=[]
+            $("input[name=box]:checked").each(function () {
+                checkList.push($(this).val())
+            })
 
-
-
-
-            var columnNameStr = selectList.items.toString()
+            var columnNameStr = checkList.toString()
             tableConfiguration2(1,columnNameStr,searchCondition)
         })
         //详情
