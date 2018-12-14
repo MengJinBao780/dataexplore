@@ -200,7 +200,9 @@
                                                     <option value="<=">小于等于</option>
                                                     <option value=">=">大于等于</option>
                                                     <option value="==">等于</option>
+<%--
                                                     <option value="between">在--中</option>
+--%>
                                                 </select>
                                             </div>
                                             <div style="float: left;width:40%;text-align: center">
@@ -979,10 +981,11 @@
                                     url:"${ctx}/sdo/getTableFieldComs",
                                     type:"POST",
                                     data:{
-                                        subjectCode:"student",
+                                        subjectCode:"ssdd",
                                         tableName:tableName,
                                     },
                                     success:function (data) {
+                                        console.log(data)
                                         var tableInfosList = JSON.parse(data)
                                         for(var i=0;i<tableInfosList.tableInfos.length;i++){
                                             selectList.items.push(tableInfosList.tableInfos[i].columnName)
@@ -1128,11 +1131,9 @@
                             bodyStr += "<td>" + list.data[i][val] + "</td>"
                         }
 
-                        bodyStr += "<td> <button  class='operation-btn tab-preview' > 预览 </button>" +
-                            " <button  class='operation-btn tab-metadata' data-toggle='modal' data-target='#myModalTwo'name='tab-metadata' > 元数据 </button>" +
-                            "<button  class='operation-btn tab-download' name="+ fileStr+" > 下载 </button> " +
+                        bodyStr += "<td> <button  class='operation-btn tab-download' name="+ fileStr+" > 下载 </button> " +
+                            /*" <button  class='operation-btn tab-metadata' data-toggle='modal' data-target='#myModalTwo'name='tab-metadata' > 元数据 </button>" +*/
 //                            "<button  class='operation-btn tab-copyid' > 复制id </button>" +
-                            "<button type='button' class='operation-btn tab-copyid' data-toggle='popover' title='文件id' data-content='"+list.data[i].id+"'>文件id</button>" +
                             "</td></tr>"
                     }
 
@@ -1312,7 +1313,7 @@
                 data:{
                     tableName:tableName,
                     pageNo:totalIndex,
-                    subjectCode: "student"
+                    subjectCode: "ssdd"
                 },
                 success:function (data) {
                     var list = JSON.parse(data).rowData
@@ -1369,12 +1370,13 @@
                 url:"${ctx}/sdo/getTableFieldComs",
                 type:"POST",
                 data:{
-                    subjectCode:"student",
+                    subjectCode:"ssdd",
                     tableName:tableName
                 },
                 success:function (data) {
 
                     var tableInfosList = JSON.parse(data)
+                    console.log(tableInfosList)
                     $("#selectAllTab").empty()
                     $("#selectTab").empty()
                     $("#initSelect").empty()
@@ -1404,7 +1406,7 @@
                 type: "GET",
                 data: {
                     pageNo: num,
-                    subjectCode: "student",
+                    subjectCode: "ssdd",
                     tableName:tableName,
                     columnName:columnStr,
                     searchConditon:searchStr

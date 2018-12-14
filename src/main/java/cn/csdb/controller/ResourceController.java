@@ -54,7 +54,7 @@ public class ResourceController {
 /*
         String subjectCode = session.getAttribute("SubjectCode").toString();
 */
-        String subjectCode = "student";
+        String subjectCode = "ssdd";
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         IDataSource dataSource = DataSourceFactory.getDataSource("mysql");

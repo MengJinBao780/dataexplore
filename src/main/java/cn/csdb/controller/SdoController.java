@@ -490,7 +490,7 @@ public class SdoController {
 
     //用户下载一个文件
     @RequestMapping("downloadOneFile")
-    public void downloadOneFile(@RequestParam("filePathString")String filePathString,HttpServletRequest request,HttpServletResponse response) throws IOException {
+    public void downloadOneFile(@RequestParam("filePathString")String filePathString,String sdoId,HttpServletRequest request,HttpServletResponse response) throws IOException {
 
         cn.csdb.model.Resource res = sdoService.getBysubjectCode("sdc");
 
@@ -527,6 +527,10 @@ public class SdoController {
                 out.flush();
                 out.close();
             }
+        cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
+        if (sdo!=null){
+            sdoService.addDownloadCount(sdoId);
+        }
 
         /*String sdoId= fileTypeService.getById(fileInfo.getFtId()).getSdoId();
         cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
@@ -537,7 +541,7 @@ public class SdoController {
     }
     //用户批量下载文件，并且文件总大小小于500MB
     @RequestMapping("downloadFiles")
-    public void downloadFiles(@RequestParam("listId")String sList ,HttpServletRequest request,HttpServletResponse response )throws IOException{
+    public void downloadFiles(@RequestParam("listId")String sList ,String sdoId,HttpServletRequest request,HttpServletResponse response )throws IOException{
         String[] listId = sList.split(",");
         List<String> listPath = new ArrayList<>();
         List<String> listName = new ArrayList<>();
@@ -545,7 +549,7 @@ public class SdoController {
 //        path =path.substring(0,path.lastIndexOf("/"));
 //        path =path.substring(0,path.lastIndexOf("/"));
 //        path =path.substring(0,path.lastIndexOf("/"));
-        for (int i =0;i<listId.length;i++){
+        /*for (int i =0;i<listId.length;i++){
             FileInfo fileInfo = fileInfoService.getById(listId[i]);
             if (fileInfo !=null){
                 if(!listName.contains(fileInfo.getFileName())) {
@@ -554,6 +558,11 @@ public class SdoController {
                     listName.add(fileInfo.getFileName());
                 }
             }
+        }*/
+        for(String filePath:listId){
+            listPath.add(filePath);
+            String fileName = filePath.substring(filePath.lastIndexOf(Matcher.quoteReplacement(File.separator)) + 1);
+            listName.add(fileName);
         }
         String loginId = String.valueOf(request.getSession().getAttribute("loginId"));
         if (loginId.equals("") || loginId.equals("null")){
@@ -601,16 +610,12 @@ public class SdoController {
                 out.close();
                 //删除临时文件
                 file.delete();
-                for (int i =0;i<listId.length;i++) {
-                    FileInfo fileInfo = fileInfoService.getById(listId[i]);
-                    if (fileInfo != null) {
+/*
                         String sdoId= fileTypeService.getById(fileInfo.getFtId()).getSdoId();
-                        cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
-                        if (sdo!=null){
-                            sdoService.addDownloadCount(sdoId);
-                            sdoDownloadService.addLog(loginId,fileInfo.getId(),fileInfo.getFileName(),sdo.getId(),sdo.getTitle());
-                        }
-                    }
+*/
+                cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
+                if (sdo!=null){
+                    sdoService.addDownloadCount(sdoId);
                 }
             }
         }
