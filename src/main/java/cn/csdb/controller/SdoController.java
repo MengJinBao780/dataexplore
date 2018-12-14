@@ -37,6 +37,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.regex.Matcher;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpSession;
@@ -446,18 +447,33 @@ public class SdoController {
         List<Map<String,String>> list2 = new ArrayList<>();
         cn.csdb.model.Resource res = sdoService.getBysubjectCode(subjectCode);
         String[] filePath = res.getFilePath().split(";");
-        for(String filePathString:filePath){
-            Map<String,String> map1 = new HashMap<>();
-            String s = filePathString.substring(filePathString.lastIndexOf("%")+1);
-            map1.put("fileName",s);
-            map1.put("filePathString",filePathString);
-            map1.put("size","0.1M");
-            map1.put("recordNum","1");
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            map1.put("updateTime",sdf.format(res.getCreateTime()));
-            list2.add(map1);
+        if(!"".equals(fileName)){
+            for (String filePathString : filePath) {
+                Map<String, String> map1 = new HashMap<>();
+                String s = filePathString.substring(filePathString.lastIndexOf("%") + 1);
+                if(s.indexOf(fileName)!=-1) {
+                    map1.put("fileName", s);
+                    map1.put("filePathString", filePathString);
+                    map1.put("size", "0.1M");
+                    map1.put("recordNum", "1");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    map1.put("updateTime", sdf.format(res.getCreateTime()));
+                    list2.add(map1);
+                }
+            }
+        }else {
+            for (String filePathString : filePath) {
+                Map<String, String> map1 = new HashMap<>();
+                String s = filePathString.substring(filePathString.lastIndexOf("%") + 1);
+                map1.put("fileName", s);
+                map1.put("filePathString", filePathString);
+                map1.put("size", "0.1M");
+                map1.put("recordNum", "1");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                map1.put("updateTime", sdf.format(res.getCreateTime()));
+                list2.add(map1);
+            }
         }
-
 /*
         List<Map<String,String>> list2 = fileInfoService.getFileByCondition(list1,pid,fileName,fileType,pageNum,sdoId);
 */
@@ -474,24 +490,29 @@ public class SdoController {
 
     //用户下载一个文件
     @RequestMapping("downloadOneFile")
-    public void downloadOneFile(@RequestParam("id")String id,HttpServletRequest request,HttpServletResponse response) throws IOException {
-        FileInfo fileInfo = fileInfoService.getById(id);
-        if (fileInfo == null) {
+    public void downloadOneFile(@RequestParam("filePathString")String filePathString,HttpServletRequest request,HttpServletResponse response) throws IOException {
+
+        cn.csdb.model.Resource res = sdoService.getBysubjectCode("sdc");
+
+        if (filePathString == "") {
             return;
         }
+        String fileRealPath = filePathString.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
+
         String loginId = String.valueOf(request.getSession().getAttribute("loginId"));
         if (loginId.equals("") || loginId.equals("null")) {
             loginId = "匿名用户";
             return;
         }
-        if(!fileInfo.getFtName().toUpperCase().equals("HDF")){
 //            String path = this.getClass().getResource("/").getPath().substring(1);
 //            path =path.substring(0,path.lastIndexOf("/"));
 //            path =path.substring(0,path.lastIndexOf("/"));
 //            path =path.substring(0,path.lastIndexOf("/"));
            // File file = new File("D:\\"+fileInfo.getFilePath());
+/*
             File file = new File(("//"+fileInfo.getFilePath()).replaceAll("\\\\", "//").replaceAll("//", "/") );
-
+*/
+            File file = new File(fileRealPath);
             if (file.exists() && file.isFile()) {
                 BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
                 byte[] buffer = new byte[bis.available()];
@@ -506,20 +527,13 @@ public class SdoController {
                 out.flush();
                 out.close();
             }
-        }else if(fileInfo.getFtName().equals("HDF")){
-            UrlUtil urlUtil = new UrlUtil();
-            String url = "http://www.gscloud.cn/sources/getdownloadlink/"+fileInfo.getFilePath()+"/"+fileInfo.getPid()+"?userid=data@cnic.cn";
-            if (urlUtil.getUrlFromGscloud(url).equals("null")){
-                return;
-            }
-            response.sendRedirect(urlUtil.getUrlFromGscloud(url));
-        }
-        String sdoId= fileTypeService.getById(fileInfo.getFtId()).getSdoId();
+
+        /*String sdoId= fileTypeService.getById(fileInfo.getFtId()).getSdoId();
         cn.csdb.model.Resource sdo = sdoService.getSdoById(sdoId);
         if (sdo!=null){
             sdoService.addDownloadCount(sdoId);
             sdoDownloadService.addLog(loginId, fileInfo.getId(), fileInfo.getFileName(),sdo.getId(),sdo.getTitle());
-        }
+        }*/
     }
     //用户批量下载文件，并且文件总大小小于500MB
     @RequestMapping("downloadFiles")
