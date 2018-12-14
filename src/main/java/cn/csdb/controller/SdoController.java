@@ -447,18 +447,33 @@ public class SdoController {
         List<Map<String,String>> list2 = new ArrayList<>();
         cn.csdb.model.Resource res = sdoService.getBysubjectCode(subjectCode);
         String[] filePath = res.getFilePath().split(";");
-        for(String filePathString:filePath){
-            Map<String,String> map1 = new HashMap<>();
-            String s = filePathString.substring(filePathString.lastIndexOf("%")+1);
-            map1.put("fileName",s);
-            map1.put("filePathString",filePathString);
-            map1.put("size","0.1M");
-            map1.put("recordNum","1");
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            map1.put("updateTime",sdf.format(res.getCreateTime()));
-            list2.add(map1);
+        if(!"".equals(fileName)){
+            for (String filePathString : filePath) {
+                Map<String, String> map1 = new HashMap<>();
+                String s = filePathString.substring(filePathString.lastIndexOf("%") + 1);
+                if(s.indexOf(fileName)!=-1) {
+                    map1.put("fileName", s);
+                    map1.put("filePathString", filePathString);
+                    map1.put("size", "0.1M");
+                    map1.put("recordNum", "1");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    map1.put("updateTime", sdf.format(res.getCreateTime()));
+                    list2.add(map1);
+                }
+            }
+        }else {
+            for (String filePathString : filePath) {
+                Map<String, String> map1 = new HashMap<>();
+                String s = filePathString.substring(filePathString.lastIndexOf("%") + 1);
+                map1.put("fileName", s);
+                map1.put("filePathString", filePathString);
+                map1.put("size", "0.1M");
+                map1.put("recordNum", "1");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                map1.put("updateTime", sdf.format(res.getCreateTime()));
+                list2.add(map1);
+            }
         }
-
 /*
         List<Map<String,String>> list2 = fileInfoService.getFileByCondition(list1,pid,fileName,fileType,pageNum,sdoId);
 */
