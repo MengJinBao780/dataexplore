@@ -731,7 +731,7 @@
     {{each tableInfos as value i}}
     <div class="cus_che">
         <input type="checkbox"  name="box" value="{{value.columnName}}" checked="checked" >
-        <span>{{value.columnName}}</span>
+        <span>{{value.columnComment}}</span>
     </div>
     {{/each}}
 </script>
@@ -754,7 +754,7 @@
 </script>
 <script type="text/html" id="resourceTmpTableHead">
     {{each tableInfos as value i}}
-    <th style="background-color: #64aed9;color: #FFFFFF;">{{value.columnName}}</th>
+    <th style="background-color: #64aed9;color: #FFFFFF;">{{value.columnComment}}</th>
     {{/each}}
     <th style="background-color: #64aed9;color: #FFFFFF;">操作</th>
 </script>
@@ -1304,8 +1304,10 @@
         })
         //详情
         $(".tab-content").delegate(".seeDetails","click",function () {
-            var index = $(".seeDetails").index($(this))
+            var index = $("#"+tableName +" .seeDetails").index($(this))
+            console.log(indexPage)
             var totalIndex=(indexPage-1)*10+(index+1)
+            console.log(totalIndex)
             $.ajax({
                 url:"${ctx}/sdo/getRelationalDatabaseByTableName",
                 type:"GET",
@@ -1316,6 +1318,7 @@
                 },
                 success:function (data) {
                     var list = JSON.parse(data).rowData
+                    console.log(JSON.parse(data))
                     var keyList = []
                     for(var key in list){
                         keyList.push(key)
@@ -1411,6 +1414,7 @@
                 },
                 success: function (data) {
                     var DataList = JSON.parse(data);
+                    console.log(DataList)
                     $("."+tableName+":eq(0)").empty()
                     $("[kid="+tableName+"]").empty()
                     var tabHead = template("resourceTmpTableHead", DataList);
