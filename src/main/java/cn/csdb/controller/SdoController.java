@@ -1034,9 +1034,23 @@ public class SdoController {
             @RequestParam String subjectCode,
             @RequestParam(value = "pageNo",defaultValue = "1") int pageNo) {
         JSONObject jsonObject = new JSONObject();
+        List<TableInfo> tableInfos = new ArrayList<>();
+        Map<String, List<TableInfo>> fieldComsByTableName = tableFieldComsService.getDefaultFieldComsByTableName(subjectCode, tableName);
+        if (fieldComsByTableName != null) {
+            tableInfos = fieldComsByTableName.get(tableName);
+        }
+
         List<Map<String,Object>> datas = tableFieldComsService.getDataByTable(null,null,tableName ,subjectCode, 0 , pageNo);
         Map<String,Object>rowData = datas.get(datas.size()-1);
-        jsonObject.put("rowData", rowData);
+        Map<String,Object>newRowData = new HashMap<>();
+        for(TableInfo tableInfo:tableInfos){
+            for(String key:rowData.keySet()){
+                if((tableInfo.getColumnName().equals(key))) {
+                    newRowData.put(tableInfo.getColumnComment(), rowData.get(key));
+                }
+            }
+        }
+        jsonObject.put("rowData", newRowData);
         return jsonObject;
     }
 }
