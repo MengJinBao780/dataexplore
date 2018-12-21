@@ -1114,10 +1114,12 @@
                             bodyStr += "<td>" + list.data[i][val] + "</td>"
                         }
 
-                        bodyStr += "<td> <button  class='operation-btn tab-download' name="+ fileStr+" > 下载 </button> " +
-                            /*" <button  class='operation-btn tab-metadata' data-toggle='modal' data-target='#myModalTwo'name='tab-metadata' > 元数据 </button>" +*/
-//                            "<button  class='operation-btn tab-copyid' > 复制id </button>" +
-                            "</td></tr>"
+                        bodyStr += "<td> <button  class='operation-btn tab-preview' > 预览 </button>" +
+                                " <button  class='operation-btn tab-metadata' data-toggle='modal' data-target='#myModalTwo'name='tab-metadata' > 元数据 </button>" +
+                                "<button  class='operation-btn tab-download' name="+ fileStr+"> 下载 </button> " +
+                                //                            "<button  class='operation-btn tab-copyid' > 复制id </button>" +
+                                "<button type='button' class='operation-btn tab-copyid' data-toggle='popover' title='文件id' data-content='"+list.data[i].id+"'>文件id</button>" +
+                                "</td></tr>"
                     }
 
                     $("#table-th thead").append(headStr);
