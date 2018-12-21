@@ -456,13 +456,17 @@
                             <table class="table table-bordered">
                                 <tbody>
                                 <tr>
-                                    <td rowspan="8" style="width: 15%">基本信息</td>
-                                    <td style="width: 25% !important;">数据对象</td>
-                                    <td style="width: 65%" id="data-title"></td>
+                                    <td rowspan="9" style="width: 15%">基本信息</td>
+                                    <%--<td style="width: 25% !important;">子课题编号</td>
+                                    <td style="width: 65%" id="data-productSN"></td>--%>
+                                </tr>
+                                <tr>
+                                    <td >数据对象</td>
+                                    <td  id="data-title" style="text-align: left;word-break: break-all"></td>
                                 </tr>
                                 <tr>
                                     <td>简介</td>
-                                    <td id="data-desc"></td>
+                                    <td id="data-desc" style="text-align: left;word-break: break-all"></td>
                                 </tr>
                                 <tr>
                                     <td>资源关键词</td>
@@ -487,27 +491,6 @@
                                 <tr>
                                     <td>范围说明</td>
                                     <td id="data-rangeDescription"></td>
-                                </tr>
-                                <tr>
-                                    <td rowspan="5">地理范围</td>
-                                    <td>地理中心点坐标</td>
-                                    <td id="data-center"></td>
-                                </tr>
-                                <tr>
-                                    <td>地理左上角坐标</td>
-                                    <td id="data-upLeft"></td>
-                                </tr>
-                                <tr>
-                                    <td>地理右上角坐标</td>
-                                    <td id="data-upRight"></td>
-                                </tr>
-                                <tr>
-                                    <td>地理右下角坐标</td>
-                                    <td id="data-lowLeft"></td>
-                                </tr>
-                                <tr>
-                                    <td>地理左下角坐标</td>
-                                    <td id="data-lowRight"></td>
                                 </tr>
                                 <tr>
                                     <td rowspan="2">时间范围</td>
